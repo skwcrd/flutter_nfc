@@ -1,0 +1,32 @@
+name: flutter_nfc
+description: The flutter plugin for support using NFC features on Android and iOS.
+version: 1.0.0
+author: Sukawit Charoendet <sukawit.ch@hotmail.com>
+homepage: https://github.com/skwcrd/flutter_nfc
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_driver:
+    sdk: flutter
+
+  e2e:
+  test:
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.skwcrd.flutter_nfc
+        pluginClass: FlutterNfcPlugin
+      ios:
+        pluginClass: FlutterNfcPlugin
