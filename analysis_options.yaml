@@ -1,0 +1,65 @@
+include: lib/rules.yaml
+linter:
+  rules:
+    # Error Rules
+    # Possible coding errors.
+    # Avoid relative imports for files in lib/.
+    # Conflicts with `prefer_relative_imports`
+    always_use_package_imports: false
+    # Avoid method calls or property accesses on a "dynamic" target.
+    avoid_dynamic_calls: false # (experimental)
+    # Avoid using web-only libraries outside Flutter web plugin packages.
+    avoid_web_libraries_in_flutter: false # (experimental)
+    # Conditions should not unconditionally evaluate to true or to false.
+    invariant_booleans: false # (experimental)
+
+    # Style Rules
+    # Specify type annotations.
+    # Conflicts with `omit_local_variable_types` and other rules.
+    # As per Dart guidelines, we want to avoid unnecessary types to make the code more readable.
+    # See https://dart.dev/guides/language/effective-dart/design#avoid-type-annotating-initialized-local-variables
+    always_specify_types: false
+    # Avoid using as.
+    # `as` is not that bad (especially with the upcoming non-nullable types).
+    # Explicit exceptions is better than implicit exceptions.
+    avoid_as: false # (deprecated)
+    # Avoid catches without on clauses.
+    # There are situations where we voluntarily want to catch everything, especially as a library.
+    avoid_catches_without_on_clauses: false
+    # Don't cast a nullable value to a non nullable type.
+    cast_nullable_to_non_nullable: false # (experimental)
+    # Prefer using lowerCamelCase for constant names.
+    constant_identifier_names: false
+    # Avoid lines longer than 80 characters.
+    # Boring as it sometimes force a line of 81 characters to be split in two.
+    # As long as we try to respect that 80 characters limit, going slightly above is fine.
+    lines_longer_than_80_chars: false
+    # No default cases.
+    # Disabled for now until we have NNBD as it otherwise conflicts with `missing_return`
+    no_default_cases: false # (experimental)
+    # Don't use null check on a potentially nullable type parameter.
+    null_check_on_nullable_type_parameter: false # (experimental)
+    # Don't reassign references to parameters of functions or methods.
+    parameter_assignments: false
+    # Prefer using a boolean as the assert condition.
+    prefer_bool_in_asserts: false # (deprecated)
+    # Prefer double quotes where they won't require escape sequences.
+    # Conflicts with `prefer_single_quotes`
+    # Single quotes are easier to type and don't compromise on readability.
+    prefer_double_quotes: false
+    # Document all public members.
+    public_member_api_docs: false
+    # Place the super call last in a constructor initialization list.
+    super_goes_last: false # (deprecated)
+    # Don't use final for local variables.
+    # Incompatible with `prefer_final_locals`
+    # Having immutable local variables makes larger functions more predictible so we will use `prefer_final_locals` instead.
+    unnecessary_final: false
+    # Unnecessary null checks.
+    unnecessary_null_checks: false # (experimental)
+    # Use a non-nullable type for a final variable initialized with a non-nullable value.
+    unnecessary_nullable_for_final_variable_declarations: false # (experimental)
+    # Use late for private members with non-nullable type.
+    use_late_for_private_fields_and_variables: false # (experimental)
+    # Use predefined named constants.
+    use_named_constants: false

@@ -6,15 +6,30 @@ import 'package:flutter/services.dart';
 import 'package:flutter_nfc/flutter_nfc.dart';
 
 void main() {
-  runApp(ExampleApp());
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runZonedGuarded(() {
+    runApp(const App());
+  }, (error, stackTrace) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace ?? StackTrace.current,
+        library: "Example Exception",
+        context: ErrorDescription(
+          "Error on runZonedGuarded in main()")));
+  });
 }
 
-class ExampleApp extends StatefulWidget {
+class App extends StatefulWidget {
+  /// start widget root app, run in main.
+  const App({ Key key }) : super(key: key);
+
   @override
-  _ExampleAppState createState() => _ExampleAppState();
+  _AppState createState() => _AppState();
 }
 
-class _ExampleAppState extends State<ExampleApp> {
+class _AppState extends State<App> {
   String _platformVersion = 'Unknown';
 
   @override
@@ -23,25 +38,31 @@ class _ExampleAppState extends State<ExampleApp> {
     _initPlatformState();
   }
 
+  // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> _initPlatformState() async {
     String platformVersion;
-
+    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await FlutterNfc.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    if ( mounted ) {
-      setState(() {
-        _platformVersion = platformVersion;
-      });
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return;
     }
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) =>
+    MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -50,10 +71,9 @@ class _ExampleAppState extends State<ExampleApp> {
         ),
         body: Center(
           child: Text(
-            'Running on: $_platformVersion',
+            'Running on: $_platformVersion\n',
           ),
         ),
       ),
     );
-  }
 }

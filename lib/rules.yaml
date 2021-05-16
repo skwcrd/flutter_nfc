@@ -1,0 +1,301 @@
+analyzer:
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+  language:
+    strict-inference: true
+
+  errors:
+    dead_code: info
+
+    invalid_assignment: warning
+    # Increase the severity of the unused_import hint.
+    unused_import: warning
+    # treat missing required parameters as a warning (not a hint)
+    missing_required_param: warning
+    # treat missing returns as a warning (not a hint)
+    missing_return: warning
+
+    import_of_legacy_library_into_null_safe: ignore
+    # Explicitly enabled even conflicting rules and are fixing the conflict in this file.
+    # Otherwise cause the import of all_lint_rules to warn because of some rules conflicts.
+    # We explicitly enabled even conflicting rules and are fixing the conflict in this file.
+    included_file_warning: ignore
+    # Causes false positives (https://github.com/dart-lang/sdk/issues/41571
+    top_level_function_literal_block: ignore
+    # allow having TODOs in the code
+    todo: ignore
+
+    # There are currently 10k violations in test/ and tool/.
+    always_declare_return_types: ignore
+    # There are currently 5000 violations in lib/. This just does not fit well
+    # with the analyzer team's style.
+    omit_local_variable_types: ignore
+    # There are currently 3360 violations in lib/.
+    prefer_single_quotes: ignore
+
+    # allow self-reference to deprecated members (we do this because otherwise we have
+    # to annotate every member in every test, assert, etc, when we deprecate something)
+    deprecated_member_use_from_same_package: ignore
+
+    # Ignore analyzer hints for updating pubspecs when using Future or
+    # Stream and not importing dart:async
+    # Please see https://github.com/flutter/flutter/pull/24528 for details.
+    sdk_version_async_exported_from_core: ignore
+
+    # "strict-inference" is enabled, but "unused" parameters named '_' are
+    # still reported.  Re-evaluate after
+    # https://github.com/dart-lang/language/pull/599 and a functional fix land.
+    inference_failure_on_untyped_parameter: ignore
+    # There are about 10k violations in test/ due to missing return types on
+    # test methods. It would be nice to mark this code as
+    # "ignored for test/**/*.dart".
+    inference_failure_on_function_return_type: ignore
+
+linter:
+  rules:
+    # Error Rules
+    # Possible coding errors.
+    # Avoid relative imports for files in lib/.
+    # Conflicts with `prefer_relative_imports`
+    - always_use_package_imports
+    # Avoid method calls or property accesses on a "dynamic" target.
+    - avoid_dynamic_calls # (experimental)
+    - avoid_empty_else # Avoid empty else statements.
+    - avoid_print # Avoid print calls in production code.
+    - avoid_relative_lib_imports # Avoid relative imports for files in lib/.
+    - avoid_returning_null_for_future # Avoid returning null for Future.
+    - avoid_slow_async_io # Avoid slow async dart:io methods.
+    - avoid_type_to_string # Avoid .toString() in production code since results may be minified.
+    - avoid_types_as_parameter_names # Avoid types as parameter names.
+    # Avoid using web-only libraries outside Flutter web plugin packages.
+    - avoid_web_libraries_in_flutter # (experimental)
+    - cancel_subscriptions # Cancel instances of dart.async.StreamSubscription.
+    - close_sinks # Close instances of dart.core.Sink.
+    - comment_references # Only reference in scope identifiers in doc comments.
+    - control_flow_in_finally # Avoid control flow in finally blocks.
+    # DO reference all public properties in debug methods.
+    # Too many false positive (builders)
+    - diagnostic_describe_all_properties
+    - empty_statements # Avoid empty statements.
+    - hash_and_equals # Always override hashCode if overriding ==.
+    # Conditions should not unconditionally evaluate to true or to false.
+    - invariant_booleans # (experimental)
+    - iterable_contains_unrelated_type # Invocation of Iterable.contains with references of unrelated types.
+    - list_remove_unrelated_type # Invocation of remove with references of unrelated types.
+    - literal_only_boolean_expressions # Boolean expression composed only with literals.
+    - no_adjacent_strings_in_list # Don't use adjacent strings in list.
+    - no_duplicate_case_values # Don't use more than one case with same value.
+    - no_logic_in_create_state # Don't put any logic in createState.
+    - prefer_relative_imports # Prefer relative imports for files in lib/.
+    - prefer_void_to_null # Don't use the Null type, unless you are positive that you don't want void.
+    - test_types_in_equals # Test type arguments in operator ==(Object other).
+    - throw_in_finally # Avoid throw in finally block.
+    - unnecessary_statements # Avoid using unnecessary statements.
+    - unrelated_type_equality_checks # Equality operator == invocation with references of unrelated types.
+    - unsafe_html # Avoid unsafe HTML APIs.
+    - use_key_in_widget_constructors # Use key in widget constructors.
+    - valid_regexps # Use valid regular expression syntax.
+
+    # Style Rules
+    # Matters of style, largely derived from the official Dart Style Guide.
+    - always_declare_return_types # Declare method return types.
+    - always_put_control_body_on_new_line # Separate the control structure expression from its statement.
+    # Put required named parameters first.
+    # Conflicts with the convention used by flutter, which puts `Key key`
+    # and `@required Widget child` last.
+    - always_put_required_named_parameters_first
+    - always_require_non_null_named_parameters # Specify @required on named parameters without defaults.
+    # Specify type annotations.
+    # Conflicts with `omit_local_variable_types` and other rules.
+    # As per Dart guidelines, we want to avoid unnecessary types to make the code more readable.
+    # See https://dart.dev/guides/language/effective-dart/design#avoid-type-annotating-initialized-local-variables
+    - always_specify_types
+    - annotate_overrides # Annotate overridden members.
+    # Avoid annotating with dynamic when not required.
+    # Conflicts with `implicit-dynamic`
+    - avoid_annotating_with_dynamic
+    # Avoid using as.
+    # `as` is not that bad (especially with the upcoming non-nullable types).
+    # Explicit exceptions is better than implicit exceptions.
+    - avoid_as # (deprecated)
+    - avoid_bool_literals_in_conditional_expressions # Avoid bool literals in conditional expressions.
+    # Avoid catches without on clauses.
+    # There are situations where we voluntarily want to catch everything, especially as a library.
+    - avoid_catches_without_on_clauses
+    - avoid_catching_errors # Don't explicitly catch Error or types that implement it.
+    - avoid_classes_with_only_static_members # Avoid defining a class that contains only static members.
+    - avoid_double_and_int_checks # Avoid double and int checks.
+    - avoid_equals_and_hash_code_on_mutable_classes # Avoid overloading operator == and hashCode on classes not marked @immutable.
+    - avoid_escaping_inner_quotes # Avoid escaping inner quotes by converting surrounding quotes.
+    - avoid_field_initializers_in_const_classes # Avoid field initializers in const classes.
+    - avoid_function_literals_in_foreach_calls # Avoid using forEach with a function literal.
+    - avoid_implementing_value_types # Don't implement classes that override ==.
+    - avoid_init_to_null # Don't explicitly initialize variables to null.
+    - avoid_js_rounded_ints # Avoid JavaScript rounded ints.
+    - avoid_null_checks_in_equality_operators # Don't check for null in custom == operators.
+    # Avoid positional boolean parameters.
+    # false positives (setter-like functions)
+    - avoid_positional_boolean_parameters
+    - avoid_private_typedef_functions # Avoid private typedef functions.
+    - avoid_redundant_argument_values # Avoid redundant argument values.
+    - avoid_renaming_method_parameters # Don't rename parameters of overridden methods.
+    - avoid_return_types_on_setters # Avoid return types on setters.
+    - avoid_returning_null # Avoid returning null from members whose return type is bool, double, int, or num.
+    - avoid_returning_null_for_void # Avoid returning null for void.
+    - avoid_returning_this # Avoid returning this from methods just to enable a fluent interface.
+    - avoid_setters_without_getters # Avoid setters without getters.
+    - avoid_shadowing_type_parameters # Avoid shadowing type parameters.
+    - avoid_single_cascade_in_expression_statements # Avoid single cascade in expression statements.
+    # Avoid annotating types for function expression parameters.
+    # Cumbersome with `context.select`
+    - avoid_types_on_closure_parameters
+    - avoid_unnecessary_containers # Avoid unnecessary containers.
+    - avoid_unused_constructor_parameters # Avoid defining unused parameters in constructors.
+    - avoid_void_async # Avoid async functions that return void.
+    - await_only_futures # Await only futures.
+    - camel_case_extensions # Name extensions using UpperCamelCase.
+    - camel_case_types # Name types using UpperCamelCase.
+    # Cascade consecutive method invocations on the same reference.
+    # Personal preference. I don't find it more readable
+    - cascade_invocations
+    # Don't cast a nullable value to a non nullable type.
+    - cast_nullable_to_non_nullable # (experimental)
+    - constant_identifier_names # Prefer using lowerCamelCase for constant names.
+    - curly_braces_in_flow_control_structures # DO use curly braces for all flow control structures.
+    - deprecated_consistency # Missing deprecated annotation.
+    - directives_ordering # Adhere to Effective Dart Guide directives sorting conventions.
+    - do_not_use_environment # Do not use environment declared variables.
+    - empty_catches # Avoid empty catch blocks.
+    - empty_constructor_bodies # Use ; instead of {} for empty constructor bodies.
+    - exhaustive_cases # Define case clauses for all constants in enum-like classes.
+    - file_names # Name source files using lowercase_with_underscores.
+    - flutter_style_todos # Use Flutter TODO format: // TODO(username): message, https://URL-to-issue.
+    - implementation_imports # Don't import implementation files from another package.
+    - join_return_with_assignment # Join return statement with assignment when possible.
+    - leading_newlines_in_multiline_strings # Start multiline strings with a newline.
+    - library_names # Name libraries using lowercase_with_underscores.
+    - library_prefixes # Use lowercase_with_underscores when specifying a library prefix.
+    # Avoid lines longer than 80 characters.
+    # Boring as it sometimes force a line of 81 characters to be split in two.
+    # As long as we try to respect that 80 characters limit, going slightly above is fine.
+    - lines_longer_than_80_chars
+    - missing_whitespace_between_adjacent_strings # Missing whitespace between adjacent strings.
+    # No default cases.
+    # Disabled for now until we have NNBD as it otherwise conflicts with `missing_return`
+    - no_default_cases # (experimental)
+    - no_runtimeType_toString # Avoid calling toString() on runtimeType.
+    - non_constant_identifier_names # Name non-constant identifiers using lowerCamelCase.
+    # Don't use null check on a potentially nullable type parameter.
+    - null_check_on_nullable_type_parameter # (experimental)
+    - null_closures # Do not pass null as an argument where a closure is expected.
+    - omit_local_variable_types # Omit type annotations for local variables.
+    - one_member_abstracts # Avoid defining a one-member abstract class when a simple function will do.
+    - only_throw_errors # Only throw instances of classes extending either Exception or Error.
+    - overridden_fields # Don't override fields.
+    - package_api_docs # Provide doc comments for all public APIs.
+    - package_prefixed_library_names # Prefix library names with the package name and a dot-separated path.
+    - parameter_assignments # Don't reassign references to parameters of functions or methods.
+    - prefer_adjacent_string_concatenation # Use adjacent strings to concatenate string literals.
+    - prefer_asserts_in_initializer_lists # Prefer putting asserts in initializer list.
+    # Prefer asserts with message.
+    # False positive, null checks don't need a message
+    - prefer_asserts_with_message
+    # Prefer using a boolean as the assert condition.
+    - prefer_bool_in_asserts # (deprecated)
+    - prefer_collection_literals # Use collection literals when possible.
+    - prefer_conditional_assignment # Prefer using ??= over testing for null.
+    - prefer_const_constructors # Prefer const with constant constructors.
+    # Prefer declaring const constructors on @immutable classes.
+    # Does not apply to providers
+    - prefer_const_constructors_in_immutables
+    - prefer_const_declarations # Prefer const over final for declarations.
+    - prefer_const_literals_to_create_immutables # Prefer const literals as parameters of constructors on @immutable classes.
+    - prefer_constructors_over_static_methods # Prefer defining constructors instead of static methods to create instances.
+    - prefer_contains # Use contains for List and String instances.
+    # Prefer double quotes where they won't require escape sequences.
+    # Conflicts with `prefer_single_quotes`
+    # Single quotes are easier to type and don't compromise on readability.
+    - prefer_double_quotes
+    - prefer_equal_for_default_values # Use = to separate a named parameter from its default value.
+    # Use => for short members whose body is a single return statement.
+    # Not quite suitable for Flutter, which may have a `build` method with a single
+    # return, but that return is still complex enough that a "body" is worth it.
+    - prefer_expression_function_bodies
+    - prefer_final_fields # Private field could be final.
+    - prefer_final_in_for_each # Prefer final in for-each loop variable if reference is not reassigned.
+    - prefer_final_locals # Prefer final for variable declarations if they are not reassigned.
+    - prefer_for_elements_to_map_fromIterable # Prefer for elements when building maps from iterables.
+    - prefer_foreach # Use forEach to only apply a function to all the elements.
+    - prefer_function_declarations_over_variables # Use a function declaration to bind a function to a name.
+    - prefer_generic_function_type_aliases # Prefer generic function type aliases.
+    - prefer_if_elements_to_conditional_expressions # Prefer if elements to conditional expressions where possible.
+    - prefer_if_null_operators # Prefer using if null operators.
+    - prefer_initializing_formals # Use initializing formals when possible.
+    - prefer_inlined_adds # Inline list item declarations where possible.
+    - prefer_int_literals # Prefer int literals over double literals.
+    - prefer_interpolation_to_compose_strings # Use interpolation to compose strings and values.
+    - prefer_is_empty # Use isEmpty for Iterables and Maps.
+    - prefer_is_not_empty # Use isNotEmpty for Iterables and Maps.
+    - prefer_is_not_operator # Prefer is! operator.
+    - prefer_iterable_whereType # Prefer to use whereType on iterable.
+    - prefer_mixin # Prefer using mixins.
+    - prefer_null_aware_operators # Prefer using null aware operators.
+    - prefer_single_quotes # Only use double quotes for strings containing single quotes.
+    - prefer_spread_collections # Use spread collections when possible.
+    - prefer_typing_uninitialized_variables # Prefer typing uninitialized variables and fields.
+    - provide_deprecation_message # Provide a deprecation message, via @Deprecated("message").
+    - public_member_api_docs # Document all public members.
+    - recursive_getters # Property getter recursively returns itself.
+    - sized_box_for_whitespace # SizedBox for whitespace.
+    - slash_for_doc_comments # Prefer using /// for doc comments.
+    - sort_child_properties_last # Sort child properties last in widget instance creations.
+    - sort_constructors_first # Sort constructor declarations before other members.
+    - sort_unnamed_constructors_first # Sort unnamed constructor declarations first.
+    # Place the super call last in a constructor initialization list.
+    - super_goes_last # (deprecated)
+    - tighten_type_of_initializing_formals # Tighten type of initializing formal.
+    - type_annotate_public_apis # Type annotate public APIs.
+    - type_init_formals # Don't type annotate initializing formals.
+    - unawaited_futures # Future results in async function bodies must be awaited or marked unawaited using package:pedantic.
+    - unnecessary_await_in_return # Unnecessary await keyword in return.
+    - unnecessary_brace_in_string_interps # Avoid using braces in interpolation when not needed.
+    - unnecessary_const # Avoid const keyword.
+    # Don't use final for local variables.
+    # Incompatible with `prefer_final_locals`
+    # Having immutable local variables makes larger functions more predictible so we will use `prefer_final_locals` instead.
+    - unnecessary_final
+    - unnecessary_getters_setters # Avoid wrapping fields in getters and setters just to be "safe".
+    - unnecessary_lambdas # Don't create a lambda when a tear-off will do.
+    - unnecessary_new # Unnecessary new keyword.
+    - unnecessary_null_aware_assignments # Avoid null in null-aware assignment.
+    # Unnecessary null checks.
+    - unnecessary_null_checks # (experimental)
+    - unnecessary_null_in_if_null_operators # Avoid using null in if null operators.
+    # Use a non-nullable type for a final variable initialized with a non-nullable value.
+    - unnecessary_nullable_for_final_variable_declarations # (experimental)
+    - unnecessary_overrides # Don't override a method to do a super method invocation with the same parameters.
+    - unnecessary_parenthesis # Unnecessary parenthesis can be removed.
+    - unnecessary_raw_strings # Unnecessary raw string.
+    - unnecessary_string_escapes # Remove unnecessary backslashes in strings.
+    - unnecessary_string_interpolations # Unnecessary string interpolation.
+    - unnecessary_this # Don't access members with this unless avoiding shadowing.
+    - use_full_hex_values_for_flutter_colors # Prefer an 8-digit hexadecimal integer(0xFFFFFFFF) to instantiate Color.
+    - use_function_type_syntax_for_parameters # Use generic function type syntax for parameters.
+    - use_if_null_to_convert_nulls_to_bools # Use if-null operators to convert nulls to bools.
+    - use_is_even_rather_than_modulo # Prefer intValue.isOdd/isEven instead of checking the result of % 2.
+    # Use late for private members with non-nullable type.
+    - use_late_for_private_fields_and_variables # (experimental)
+    - use_named_constants # Use predefined named constants.
+    - use_raw_strings # Use raw string to avoid escapes.
+    - use_rethrow_when_possible # Use rethrow to rethrow a caught exception.
+    - use_setters_to_change_properties # Use a setter for operations that conceptually change a property.
+    - use_string_buffers # Use string buffers to compose strings.
+    - use_to_and_as_if_applicable # Start the name of the method with to/_to or as/_as if applicable.
+    - void_checks # Don't assign to void.
+
+    # Pub Rules
+    # Pub-related rules.
+    - package_names # Use lowercase_with_underscores for package names.
+    - sort_pub_dependencies # Sort pub dependencies.

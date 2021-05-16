@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:flutter_nfc/flutter_nfc.dart';
 
 void main() {
@@ -8,9 +9,8 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+    channel.setMockMethodCallHandler(
+      (methodCall) async => '42');
   });
 
   tearDown(() {
