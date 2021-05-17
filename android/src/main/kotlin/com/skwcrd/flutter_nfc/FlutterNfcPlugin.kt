@@ -43,7 +43,7 @@ class FlutterNfcPlugin: FlutterPlugin, ActivityAware, MethodChannel.MethodCallHa
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: MethodChannel.Result) {
         when (call.method) {
             "isAvailable" -> session.isAvailable(/*call, */result)
-            "openSettings" -> openSettings()
+            "openSetting" -> openSetting(/*call, */result)
             "startSession" -> session.startSession(call, result)
             "stopSession" -> session.stopSession(/*call, */result)
             "disposeTag" -> tagManager.disposeTag(call, result)
@@ -109,12 +109,14 @@ class FlutterNfcPlugin: FlutterPlugin, ActivityAware, MethodChannel.MethodCallHa
         tagManager.dispose()
     }
 
-    private fun openSettings() {
+    private fun openSetting(/*call: MethodCall, */result: MethodChannel.Result) {
         val intent = Intent()
 
         intent.action = Settings.ACTION_NFC_SETTINGS
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         activity.applicationContext.startActivity(intent)
+
+        result.success(null)
     }
 }

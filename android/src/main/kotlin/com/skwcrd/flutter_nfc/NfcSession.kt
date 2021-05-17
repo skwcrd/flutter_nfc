@@ -43,9 +43,9 @@ class NfcSession(
             return
         }
 
-        val pollingOptions: List<String> = call.argument<List<String>>("pollingOptions")!!
+        val pollingOption: List<String> = call.argument<List<String>>("pollingOption")!!
 
-        adapter.enableReaderMode(activity, this, getFlags(pollingOptions), null)
+        adapter.enableReaderMode(activity, this, getFlags(pollingOption), null)
         result.success(null)
     }
 

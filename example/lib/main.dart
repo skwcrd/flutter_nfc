@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_nfc/flutter_nfc.dart';
+// import 'package:flutter_nfc/flutter_nfc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +43,7 @@ class _AppState extends State<App> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await FlutterNfc.platformVersion;
+      // platformVersion = await FlutterNfc.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
