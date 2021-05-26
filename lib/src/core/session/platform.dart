@@ -4,7 +4,7 @@ abstract class NFCPlatform extends NFCInterface {
   NFCPlatform() : super(token: _token);
 
   /// Create an instance using the existing implementation
-  factory NFCPlatform.delegateInstance() =>
+  factory NFCPlatform.instanceFor() =>
       NFCPlatform.instance.delegate();
 
   static final Object _token = Object();
@@ -16,10 +16,10 @@ abstract class NFCPlatform extends NFCInterface {
 
   /// The current default [NFCPlatform] instance.
   ///
-  /// It will always default to [MethodChannelNFCSession]
+  /// It will always default to [_MethodChannelNFCSession]
   /// if no other implementation was provided.
   static NFCPlatform get instance =>
-      _instance ??= MethodChannelNFCSession.instance;
+      _instance ??= _MethodChannelNFCSession.instance;
 
   static NFCPlatform _instance;
 
@@ -62,11 +62,11 @@ abstract class NFCPlatform extends NFCInterface {
   /// the message on the popup shown when the session
   /// is started.
   ///
-  /// `onSessionError` is called when the session stops
+  /// `onError` is called when the session stops
   /// for any reason after the session started.
   Future<void> startSession({
     TagCallback onTagDiscovered,
-    Set<NFCPollingOption> pollingOption,
+    Set<NFCTagPollingOption> pollingOption,
     String alertMessage,
     ErrorCallback onError,
   }) async {

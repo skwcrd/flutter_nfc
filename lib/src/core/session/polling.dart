@@ -1,4 +1,4 @@
-part of util;
+part of core.session;
 
 /// Used with `NfcSession#startTagSession`.
 ///
@@ -7,7 +7,7 @@ part of util;
 ///  * iso14443
 ///  * iso15693
 ///  * iso18092
-enum NFCPollingOption {
+enum NFCTagPollingOption {
   /// Represents `iso14443` on iOS,
   /// and `FLAG_READER_A` and `FLAG_READER_B` on Android.
   iso14443,
@@ -21,16 +21,16 @@ enum NFCPollingOption {
   iso18092,
 }
 
-extension NFCPollingOptionValue on NFCPollingOption {
+extension NFCTagPollingOptionValue on NFCTagPollingOption {
   String get value {
     switch (this) {
-      case NFCPollingOption.iso14443:
+      case NFCTagPollingOption.iso14443:
         return "iso14443";
 
-      case NFCPollingOption.iso15693:
+      case NFCTagPollingOption.iso15693:
         return "iso15693";
 
-      case NFCPollingOption.iso18092:
+      case NFCTagPollingOption.iso18092:
         return "iso18092";
 
       default:
@@ -40,18 +40,18 @@ extension NFCPollingOptionValue on NFCPollingOption {
   }
 }
 
-extension NFCPollingOptionCompare on NFCPollingOption {
+extension NFCTagPollingOptionCompare on NFCTagPollingOption {
   bool get isISO14443 =>
-      this == NFCPollingOption.iso14443;
+      this == NFCTagPollingOption.iso14443;
   bool get isISO15693 =>
-      this == NFCPollingOption.iso15693;
+      this == NFCTagPollingOption.iso15693;
   bool get isISO18092 =>
-      this == NFCPollingOption.iso18092;
+      this == NFCTagPollingOption.iso18092;
 
   bool get isNotISO14443 =>
-      this != NFCPollingOption.iso14443;
+      this != NFCTagPollingOption.iso14443;
   bool get isNotISO15693 =>
-      this != NFCPollingOption.iso15693;
+      this != NFCTagPollingOption.iso15693;
   bool get isNotISO18092 =>
-      this != NFCPollingOption.iso18092;
+      this != NFCTagPollingOption.iso18092;
 }

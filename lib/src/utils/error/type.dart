@@ -1,7 +1,6 @@
 part of util;
 
-/// Represents the type of error that occurs
-/// when the session has stopped.
+/// Represents the type of error that occurs when the session has stopped.
 /// (Currently iOS only)
 ///  * user canceled
 ///  * session timeout

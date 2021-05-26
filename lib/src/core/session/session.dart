@@ -1,8 +1,5 @@
 library core.session;
 
-import 'dart:async'
-  show StreamSubscription;
-
 import 'package:flutter/foundation.dart'
   show
     required,
@@ -10,16 +7,18 @@ import 'package:flutter/foundation.dart'
 import 'package:flutter/services.dart'
   show
     MethodCall,
-    PlatformException,
     MissingPluginException;
 
 import '../../utils/utils.dart';
 import '../interface.dart';
-import '../tags/tags.dart'
-  show NFCTag;
+import '../tag/tag.dart'
+  show
+    NFCTag,
+    NFCTagPlatform;
 
-part 'platform.dart';
 part 'method_channel.dart';
+part 'platform.dart';
+part 'polling.dart';
 
 /// Signature for `NfcSession.startSession` onTagDiscovered callback.
 /// Callback for handling on NFC tag detection.

@@ -1,17 +1,11 @@
 part of util;
 
-/// The class represents the error.
-///
-///     [@param] type     the error type.
-///     [@param] message  the error message.
-///     [@param] details  the error details information.
-///
+/// The class represents the error when the NFC feature has exception.
 abstract class NfcError extends Error {
   /// Constructs an instance with the given values for testing.
   ///
   /// The instances constructs by this way are not valid in
   /// the production environment.
-  ///
   NfcError({
     @required Object type,
     this.message,
