@@ -104,49 +104,49 @@ extension SessionErrorTypeCompare on SessionErrorType {
       this != SessionErrorType.unknown;
 }
 
-enum ReaderErrorType {
-  unsupportedFeature,
+// enum ReaderErrorType {
+//   unsupportedFeature,
 
-  securityViolation,
+//   securityViolation,
 
-  invalidParameter,
+//   invalidParameter,
 
-  invalidParameterLength,
+//   invalidParameterLength,
 
-  parameterOutOfBound,
+//   parameterOutOfBound,
 
-  radioDisabled,
+//   radioDisabled,
 
-  /// The unexpected error has occurred.
-  unknown,
-}
+//   /// The unexpected error has occurred.
+//   unknown,
+// }
 
-enum ReaderTransceiveErrorType {
-  tagConnectionLost,
+// enum ReaderTransceiveErrorType {
+//   tagConnectionLost,
 
-  retryExceeded,
+//   retryExceeded,
 
-  tagResponseError,
+//   tagResponseError,
 
-  sessionInvalidated,
+//   sessionInvalidated,
 
-  tagNotConnected,
+//   tagNotConnected,
 
-  packetTooLong,
+//   packetTooLong,
 
-  /// The unexpected error has occurred.
-  unknown,
-}
+//   /// The unexpected error has occurred.
+//   unknown,
+// }
 
-enum NdefReaderSessionErrorType {
-  tagNotWritable,
+// enum NdefReaderSessionErrorType {
+//   tagNotWritable,
 
-  tagUpdateFailure,
+//   tagUpdateFailure,
 
-  tagSizeTooSmall,
+//   tagSizeTooSmall,
 
-  zeroLengthMessage,
+//   zeroLengthMessage,
 
-  /// The unexpected error has occurred.
-  unknown,
-}
+//   /// The unexpected error has occurred.
+//   unknown,
+// }

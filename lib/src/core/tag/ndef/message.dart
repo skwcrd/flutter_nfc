@@ -3,7 +3,7 @@ part of core.tag;
 /// The class represents the immutable NDEF message.
 class NdefMessage {
   /// Constructs an instance with given records.
-  const NdefMessage({ this.records });
+  const NdefMessage({ required this.records });
 
   factory NdefMessage.fromMap(Map<String, dynamic> arg) =>
       NdefMessage(
@@ -11,13 +11,12 @@ class NdefMessage {
           .map((record) => NdefRecord(
             typeNameFormat: NdefTypeNameFormat.values
                 .firstWhere(
-                  (e) => e.value == record['typeNameFormat']),
-            type: Uint8List.fromList(
-              record['type'] as List<int>),
-            identifier: Uint8List.fromList(
-              record['identifier'] as List<int>),
-            payload: Uint8List.fromList(
-              record['payload'] as List<int>),
+                  (e) => e.value == record['typeNameFormat'],
+                  orElse: () => NdefTypeNameFormat.unknown,
+                ),
+            type: record['type'],
+            identifier: record['identifier'],
+            payload: record['payload'],
           ))
           .toList());
 

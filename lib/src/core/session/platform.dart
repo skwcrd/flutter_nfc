@@ -1,7 +1,7 @@
 part of core.session;
 
 abstract class NFCPlatform extends NFCInterface {
-  NFCPlatform() : super(token: _token);
+  NFCPlatform._() : super(token: _token);
 
   /// Create an instance using the existing implementation
   factory NFCPlatform.instanceFor() =>
@@ -21,7 +21,7 @@ abstract class NFCPlatform extends NFCInterface {
   static NFCPlatform get instance =>
       _instance ??= _MethodChannelNFCSession.instance;
 
-  static NFCPlatform _instance;
+  static NFCPlatform? _instance;
 
   /// Sets the [NFCPlatform.instance]
   static set instance(NFCPlatform instance) {
@@ -40,6 +40,7 @@ abstract class NFCPlatform extends NFCInterface {
     throw UnimplementedError('isAvailable() is not implemented');
   }
 
+  /// Open setting for enable/disble the `NFC` features on Android.
   Future<void> openSetting() {
     throw UnimplementedError('openSetting() is not implemented');
   }
@@ -65,10 +66,10 @@ abstract class NFCPlatform extends NFCInterface {
   /// `onError` is called when the session stops
   /// for any reason after the session started.
   Future<void> startSession({
-    TagCallback onTagDiscovered,
-    Set<NFCTagPollingOption> pollingOption,
-    String alertMessage,
-    ErrorCallback onError,
+    required TagCallback onTagDiscovered,
+    required Set<NFCTagPollingOption> pollingOption,
+    String? alertMessage,
+    ErrorCallback? onError,
   }) async {
     throw UnimplementedError('startSession() is not implemented');
   }
@@ -89,8 +90,8 @@ abstract class NFCPlatform extends NFCInterface {
   ///
   /// When both are used, `errorMessage` has priority.
   Future<void> stopSession({
-    String errorMessage,
-    String alertMessage,
+    String? errorMessage,
+    String? alertMessage,
   }) async {
     throw UnimplementedError('stopSession() is not implemented');
   }

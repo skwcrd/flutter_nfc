@@ -7,21 +7,21 @@ class IsoDep extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   IsoDep._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.hiLayerResponse,
-    this.historicalBytes,
-    this.isExtendedLengthApduSupported,
-    this.maxTransceiveLength,
-    int timeout,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.hiLayerResponse,
+    required this.historicalBytes,
+    required this.isExtendedLengthApduSupported,
+    required this.maxTransceiveLength,
+    required int timeout,
   }) :  _timeout = timeout,
         super._(delegate);
 
   /// Get an instance of `IsoDep` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `IsoDep`.
-  factory IsoDep._from({
-    @required NFCTagPlatform delegate,
+  static IsoDep? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotIsoDep ) {
       return null;
@@ -31,16 +31,12 @@ class IsoDep extends NFCTag {
 
     return IsoDep._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      hiLayerResponse: Uint8List.fromList(
-        _data['hiLayerResponse'] as List<int>),
-      historicalBytes: Uint8List.fromList(
-        _data['historicalBytes'] as List<int>),
-      isExtendedLengthApduSupported:
-          _data['isExtendedLengthApduSupported'] as bool,
-      maxTransceiveLength: _data['maxTransceiveLength'] as int,
-      timeout: _data['timeout'] as int);
+      identifier: _data['identifier'],
+      hiLayerResponse: _data['hiLayerResponse'],
+      historicalBytes: _data['historicalBytes'],
+      isExtendedLengthApduSupported: _data['isExtendedLengthApduSupported'],
+      maxTransceiveLength: _data['maxTransceiveLength'],
+      timeout: _data['timeout']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -67,25 +63,21 @@ class IsoDep extends NFCTag {
   ///
   /// This uses [IsoDep#transceive] API on Android.
   Future<List<int>> transceive({
-    @required Uint8List data,
-    int timeout,
-  }) async {
-    assert(
-      data != null && data.isNotEmpty,
-      'data cannot be null and empty');
-
+    required Uint8List data,
+    int? timeout,
+  }) {
     timeout ??= _timeout;
     _timeout = timeout;
 
-    return Int8List.fromList(
-      await channel.invokeMethod(
-        "transceive", {
-          'handle': handle,
-          'type': 'IsoDep',
-          'data': data,
-          'timeout': timeout,
-        }))
-        .toList();
+    return channel.invokeMethod(
+      "transceive", {
+        'handle': handle,
+        'type': 'IsoDep',
+        'data': data,
+        'timeout': timeout,
+      })
+      .then(
+        (value) => Int8List.fromList(value!).toList());
   }
 
   @override

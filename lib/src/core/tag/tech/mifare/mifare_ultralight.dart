@@ -7,19 +7,19 @@ class MifareUltralight extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   MifareUltralight._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.type,
-    this.maxTransceiveLength,
-    int timeout,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.type,
+    required this.maxTransceiveLength,
+    required int timeout,
   }) :  _timeout = timeout,
         super._(delegate);
 
   /// Get an instance of `MifareUltralight` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `MifareUltralight`.
-  factory MifareUltralight._from({
-    @required NFCTagPlatform delegate,
+  static MifareUltralight? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotMifareUltralight ) {
       return null;
@@ -29,11 +29,10 @@ class MifareUltralight extends NFCTag {
 
     return MifareUltralight._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      type: _data['type'] as int,
-      maxTransceiveLength: _data['maxTransceiveLength'] as int,
-      timeout: _data['timeout'] as int);
+      identifier: _data['identifier'],
+      type: _data['type'],
+      maxTransceiveLength: _data['maxTransceiveLength'],
+      timeout: _data['timeout']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -54,21 +53,22 @@ class MifareUltralight extends NFCTag {
   ///
   /// This uses [MifareUltralight#readPages] API on Android.
   Future<Uint8List> readPages({
-    int pageOffset,
+    required int pageOffset,
   }) =>
       channel.invokeMethod(
         "MifareUltralight", {
           'handle': handle,
           'method': 'readPages',
           'pageOffset': pageOffset,
-        });
+        })
+        .then((value) => value!);
 
   /// Sends the `Write Page` command to the tag.
   ///
   /// This uses [MifareUltralight#writePage] API on Android.
   Future<void> writePage({
-    int pageOffset,
-    Uint8List data,
+    required int pageOffset,
+    required Uint8List data,
   }) =>
       channel.invokeMethod(
         "MifareUltralight", {
@@ -84,25 +84,21 @@ class MifareUltralight extends NFCTag {
   /// This is equivalent to obtaining via `NfcA` this tag
   /// and calling `NfcA#transceive`.
   Future<List<int>> transceive({
-    @required Uint8List data,
-    int timeout,
-  }) async {
-    assert(
-      data != null && data.isNotEmpty,
-      'data cannot be null and empty');
-
+    required Uint8List data,
+    int? timeout,
+  }) {
     timeout ??= _timeout;
     _timeout = timeout;
 
-    return Int8List.fromList(
-      await channel.invokeMethod(
-        "MifareUltralight", {
-          'handle': handle,
-          'method': 'transceive',
-          'data': data,
-          'timeout': timeout,
-        }))
-        .toList();
+    return channel.invokeMethod(
+      "MifareUltralight", {
+        'handle': handle,
+        'method': 'transceive',
+        'data': data,
+        'timeout': timeout,
+      })
+      .then(
+        (value) => Int8List.fromList(value!).toList());
   }
 
   @override

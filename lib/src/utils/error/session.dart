@@ -11,8 +11,8 @@ class SessionError extends NfcError {
   /// `NfcSession#startSession` are valid.
   SessionError({
     SessionErrorType type = SessionErrorType.unknown,
-    String message,
-    Object details,
+    String? message,
+    Object? details,
   }) :  super(
           type: type,
           message: message,
@@ -21,7 +21,7 @@ class SessionError extends NfcError {
   factory SessionError.fromMap(Map<String, dynamic> arg) =>
     SessionError(
       type: SessionErrorType.values.firstWhere(
-        (type) => type.value == arg['type'].toString(),
+        (type) => type.value == arg['type'],
         orElse: () => SessionErrorType.unknown),
       message: arg['message'].toString(),
       details: arg['details']);

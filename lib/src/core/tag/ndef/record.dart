@@ -9,10 +9,10 @@ class NdefRecord {
   /// since they will ensure that the records are formatted
   /// correctly according to the NDEF specification.
   factory NdefRecord({
-    NdefTypeNameFormat typeNameFormat,
-    Uint8List type,
-    Uint8List identifier,
-    Uint8List payload,
+    required NdefTypeNameFormat typeNameFormat,
+    required Uint8List type,
+    required Uint8List identifier,
+    required Uint8List payload,
   }) {
     _validateFormat(
       format: typeNameFormat,
@@ -29,10 +29,10 @@ class NdefRecord {
 
   // NdefRecord
   const NdefRecord._({
-    this.typeNameFormat,
-    this.type,
-    this.identifier,
-    this.payload,
+    required this.typeNameFormat,
+    required this.type,
+    required this.identifier,
+    required this.payload,
   });
 
   /// Constructs an instance containing `UTF-8` text.
@@ -55,8 +55,8 @@ class NdefRecord {
       identifier: Uint8List.fromList([]),
       payload: Uint8List.fromList([
         _languageCodeBytes.length,
-        ...?_languageCodeBytes,
-        ...?utf8.encode(text),
+        ..._languageCodeBytes,
+        ...utf8.encode(text),
       ]));
   }
 
@@ -81,7 +81,7 @@ class NdefRecord {
       identifier: Uint8List.fromList([]),
       payload: Uint8List.fromList([
         _prefixIndex,
-        ...?utf8.encode(
+        ...utf8.encode(
           _uriString.substring(
             URI_PREFIX_LIST[_prefixIndex].length)),
       ]));
@@ -128,9 +128,9 @@ class NdefRecord {
     return NdefRecord(
       typeNameFormat: NdefTypeNameFormat.nfcExternal,
       type: Uint8List.fromList([
-        ...?utf8.encode(domain),
-        ...?':'.codeUnits,
-        ...?utf8.encode(type),
+        ...utf8.encode(domain),
+        ...':'.codeUnits,
+        ...utf8.encode(type),
       ]),
       identifier: Uint8List.fromList([]),
       payload: data);
@@ -207,10 +207,10 @@ class NdefRecord {
 
   // _validateFormat
   static void _validateFormat({
-    NdefTypeNameFormat format,
-    Uint8List type,
-    Uint8List identifier,
-    Uint8List payload,
+    required NdefTypeNameFormat format,
+    required Uint8List type,
+    required Uint8List identifier,
+    required Uint8List payload,
   }) {
     switch (format) {
       case NdefTypeNameFormat.empty:

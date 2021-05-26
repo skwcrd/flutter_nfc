@@ -4,9 +4,14 @@ part of core.tag;
 class FelicaPollingResponse {
   /// Constructs an instance with the given values.
   const FelicaPollingResponse({
-    this.manufacturerParameter,
-    this.requestData,
+    required this.manufacturerParameter,
+    required this.requestData,
   });
+
+  factory FelicaPollingResponse.fromMap(Map<String, dynamic> arg) =>
+      FelicaPollingResponse(
+        manufacturerParameter: arg['manufacturerParameter'],
+        requestData: arg['requestData']);
 
   /// Manufacturer Parameter.
   final Uint8List manufacturerParameter;
@@ -26,11 +31,19 @@ class FelicaPollingResponse {
 class FelicaRequestSpecificationVersionResponse {
   /// Constructs an instance with the given values.
   const FelicaRequestSpecificationVersionResponse({
-    this.statusFlag1,
-    this.statusFlag2,
-    this.basicVersion,
-    this.optionVersion,
+    required this.statusFlag1,
+    required this.statusFlag2,
+    required this.basicVersion,
+    required this.optionVersion,
   });
+
+  factory FelicaRequestSpecificationVersionResponse.fromMap(
+      Map<String, dynamic> arg) =>
+    FelicaRequestSpecificationVersionResponse(
+      statusFlag1: arg['statusFlag1'],
+      statusFlag2: arg['statusFlag2'],
+      basicVersion: arg['basicVersion'],
+      optionVersion: arg['optionVersion']);
 
   /// Status Flag 1.
   final int statusFlag1;
@@ -58,12 +71,22 @@ class FelicaRequestSpecificationVersionResponse {
 class FelicaRequestServiceV2Response {
   /// Constructs an instance with the given values.
   const FelicaRequestServiceV2Response({
-    this.statusFlag1,
-    this.statusFlag2,
-    this.encryptionIdentifier,
-    this.nodeKeyVersionListAes,
-    this.nodeKeyVersionListDes,
+    required this.statusFlag1,
+    required this.statusFlag2,
+    required this.encryptionIdentifier,
+    required this.nodeKeyVersionListAes,
+    required this.nodeKeyVersionListDes,
   });
+
+  factory FelicaRequestServiceV2Response.fromMap(Map<String, dynamic> arg) =>
+      FelicaRequestServiceV2Response(
+        statusFlag1: arg['statusFlag1'],
+        statusFlag2: arg['statusFlag2'],
+        encryptionIdentifier: arg['encryptionIdentifier'],
+        nodeKeyVersionListAes:
+            List<Uint8List>.from(arg['nodeKeyVersionListAes']),
+        nodeKeyVersionListDes:
+            List<Uint8List>.from(arg['nodeKeyVersionListDes']));
 
   /// Status Flag 1.
   final int statusFlag1;
@@ -95,10 +118,17 @@ class FelicaRequestServiceV2Response {
 class FelicaReadWithoutEncryptionResponse {
   /// Constructs an instance with the given values.
   const FelicaReadWithoutEncryptionResponse({
-    this.statusFlag1,
-    this.statusFlag2,
-    this.blockData,
+    required this.statusFlag1,
+    required this.statusFlag2,
+    required this.blockData,
   });
+
+  factory FelicaReadWithoutEncryptionResponse.fromMap(
+      Map<String, dynamic> arg) =>
+    FelicaReadWithoutEncryptionResponse(
+      statusFlag1: arg['statusFlag1'],
+      statusFlag2: arg['statusFlag2'],
+      blockData: List<Uint8List>.from(arg['blockData']));
 
   /// Status Flag 1.
   final int statusFlag1;
@@ -121,9 +151,14 @@ class FelicaReadWithoutEncryptionResponse {
 class FelicaStatusFlag {
   /// Constructs an instance with the given values.
   const FelicaStatusFlag({
-    this.statusFlag1,
-    this.statusFlag2,
+    required this.statusFlag1,
+    required this.statusFlag2,
   });
+
+  factory FelicaStatusFlag.fromMap(Map<String, dynamic> arg) =>
+      FelicaStatusFlag(
+        statusFlag1: arg['statusFlag1'],
+        statusFlag2: arg['statusFlag2']);
 
   /// Status Flag 1.
   final int statusFlag1;

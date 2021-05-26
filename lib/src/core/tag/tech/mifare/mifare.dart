@@ -7,17 +7,17 @@ class Mifare extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   Mifare._({
-    @required NFCTagPlatform delegate,
-    this.mifareFamily,
-    this.identifier,
-    this.historicalBytes,
+    required NFCTagPlatform delegate,
+    required this.mifareFamily,
+    required this.identifier,
+    required this.historicalBytes,
   }) : super._(delegate);
 
   /// Get an instance of `Mifare` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Mifare`.
-  factory Mifare._from({
-    @required NFCTagPlatform delegate,
+  static Mifare? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotMifare ) {
       return null;
@@ -27,13 +27,13 @@ class Mifare extends NFCTag {
 
     return Mifare._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
+      identifier: _data['identifier'],
       mifareFamily: MifareFamily.values
           .firstWhere(
-            (e) => e.value == _data['mifareFamily']),
-      historicalBytes: Uint8List.fromList(
-        _data['historicalBytes'] as List<int>));
+            (e) => e.value == _data['mifareFamily'],
+            orElse: () => MifareFamily.unknown,
+          ),
+      historicalBytes: _data['historicalBytes']);
   }
 
   /// The value from [NFCMiFareTag#mifareFamily] on iOS.
@@ -48,26 +48,28 @@ class Mifare extends NFCTag {
   /// Sends the native `Mifare` command to the tag.
   ///
   /// This uses [NFCMiFareTag#sendMiFareCommand] API on iOS.
-  Future<Uint8List> sendCommand(Uint8List commandPacket) =>
+  Future<List<int>> sendCommand(Uint8List commandPacket) =>
       channel.invokeMethod(
         "Mifare", {
           'handle': handle,
           'method': 'sendCommand',
           'commandPacket': commandPacket,
-        });
+        })
+        .then(
+          (value) => Int8List.fromList(value!).toList());
 
   /// Sends the `ISO7816 APDU` to the tag.
   ///
   /// This uses [NFCMiFareTag#sendMiFareISO7816Command] API on iOS.
   Future<Iso7816ResponseApdu> sendIso7816Command({
-    int instructionClass,
-    int instructionCode,
-    int p1Parameter,
-    int p2Parameter,
-    Uint8List data,
-    int expectedResponseLength,
+    required int instructionClass,
+    required int instructionCode,
+    required int p1Parameter,
+    required int p2Parameter,
+    required Uint8List data,
+    required int expectedResponseLength,
   }) =>
-      channel.invokeMethod<Map>(
+      channel.invokeMethod(
         "Mifare", {
           'handle': handle,
           'method': 'sendIso7816Command',
@@ -80,14 +82,14 @@ class Mifare extends NFCTag {
         })
         .then(
           (value) => Iso7816ResponseApdu.fromMap(
-            Map<String, dynamic>.from(value)));
+            Map<String, dynamic>.from(value!)));
 
   /// Sends the `ISO7816 APDU` to the tag.
   ///
   /// This uses [NFCMiFareTag#sendMiFareISO7816Command] API on iOS.
   Future<Iso7816ResponseApdu> sendIso7816CommandRaw(
       Uint8List data) =>
-    channel.invokeMethod<Map>(
+    channel.invokeMethod(
       "Mifare", {
         'handle': handle,
         'method': 'sendIso7816CommandRaw',
@@ -95,7 +97,7 @@ class Mifare extends NFCTag {
       })
       .then(
         (value) => Iso7816ResponseApdu.fromMap(
-          Map<String, dynamic>.from(value)));
+          Map<String, dynamic>.from(value!)));
 
   @override
   String toString() =>

@@ -7,20 +7,20 @@ class NfcF extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   NfcF._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.manufacturer,
-    this.systemCode,
-    this.maxTransceiveLength,
-    int timeout,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.manufacturer,
+    required this.systemCode,
+    required this.maxTransceiveLength,
+    required int timeout,
   }) :  _timeout = timeout,
         super._(delegate);
 
   /// Get an instance of `NfcF` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcF`.
-  factory NfcF._from({
-    @required NFCTagPlatform delegate,
+  static NfcF? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotNfcF ) {
       return null;
@@ -30,14 +30,11 @@ class NfcF extends NFCTag {
 
     return NfcF._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      manufacturer: Uint8List.fromList(
-        _data['manufacturer'] as List<int>),
-      systemCode: Uint8List.fromList(
-        _data['systemCode'] as List<int>),
-      maxTransceiveLength: _data['maxTransceiveLength'] as int,
-      timeout: _data['timeout'] as int);
+      identifier: _data['identifier'],
+      manufacturer: _data['manufacturer'],
+      systemCode: _data['systemCode'],
+      maxTransceiveLength: _data['maxTransceiveLength'],
+      timeout: _data['timeout']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -61,25 +58,21 @@ class NfcF extends NFCTag {
   ///
   /// This uses [NfcF#transceive] API on Android.
   Future<List<int>> transceive({
-    @required Uint8List data,
-    int timeout,
-  }) async {
-    assert(
-      data != null && data.isNotEmpty,
-      'data cannot be null and empty');
-
+    required Uint8List data,
+    int? timeout,
+  }) {
     timeout ??= _timeout;
     _timeout = timeout;
 
-    return Int8List.fromList(
-      await channel.invokeMethod(
-        "transceive", {
-          'handle': handle,
-          'type': 'NfcF',
-          'data': data,
-          'timeout': timeout,
-        }))
-        .toList();
+    return channel.invokeMethod(
+      "transceive", {
+        'handle': handle,
+        'type': 'NfcF',
+        'data': data,
+        'timeout': timeout,
+      })
+      .then(
+        (value) => Int8List.fromList(value!).toList());
   }
 
   @override

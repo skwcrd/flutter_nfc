@@ -7,18 +7,18 @@ class NfcV extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   NfcV._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.dsfId,
-    this.responseFlags,
-    this.maxTransceiveLength,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.dsfId,
+    required this.responseFlags,
+    required this.maxTransceiveLength,
   }) : super._(delegate);
 
   /// Get an instance of `NfcV` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcV`.
-  factory NfcV._from({
-    @required NFCTagPlatform delegate,
+  static NfcV? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotNfcV ) {
       return null;
@@ -28,11 +28,10 @@ class NfcV extends NFCTag {
 
     return NfcV._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      dsfId: _data['dsfId'] as int,
-      responseFlags: _data['responseFlags'] as int,
-      maxTransceiveLength: _data['maxTransceiveLength'] as int);
+      identifier: _data['identifier'],
+      dsfId: _data['dsfId'],
+      responseFlags: _data['responseFlags'],
+      maxTransceiveLength: _data['maxTransceiveLength']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -51,21 +50,16 @@ class NfcV extends NFCTag {
   ///
   /// This uses [NfcV#transceive] API on Android.
   Future<List<int>> transceive({
-    @required Uint8List data,
-  }) async {
-    assert(
-      data != null && data.isNotEmpty,
-      'data cannot be null and empty');
-
-    return Int8List.fromList(
-      await channel.invokeMethod(
+    required Uint8List data,
+  }) =>
+      channel.invokeMethod(
         "transceive", {
           'handle': handle,
           'type': 'NfcV',
           'data': data,
-        }))
-        .toList();
-  }
+        })
+        .then(
+          (value) => Int8List.fromList(value!).toList());
 
   @override
   String toString() =>

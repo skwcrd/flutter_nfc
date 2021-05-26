@@ -7,15 +7,15 @@ class NdefFormatable extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   NdefFormatable._({
-    NFCTagPlatform delegate,
-    this.identifier,
+    required NFCTagPlatform delegate,
+    required this.identifier,
   }) : super._(delegate);
 
   /// Get an instance of `NdefFormatable` for the given tag.
   ///
   /// Returns null if the tag is not `NDEF` formatable.
-  factory NdefFormatable._from({
-    @required NFCTagPlatform delegate,
+  static NdefFormatable? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotNdefFormatable ) {
       return null;
@@ -25,8 +25,7 @@ class NdefFormatable extends NFCTag {
 
     return NdefFormatable._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>));
+      identifier: _data['identifier']);
   }
 
   /// The value from [Tag#id] on Android.

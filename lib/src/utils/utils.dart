@@ -3,9 +3,6 @@ library util;
 import 'dart:typed_data'
   show Uint8List;
 
-import 'package:flutter/foundation.dart'
-  show required;
-
 import 'package:convert/convert.dart'
   show hex;
 

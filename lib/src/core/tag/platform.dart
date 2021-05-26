@@ -2,12 +2,12 @@ part of core.tag;
 
 abstract class NFCTagPlatform extends NFCInterface {
   NFCTagPlatform({
-    @required this.data,
+    required this.data,
   }) : super(token: _token);
 
   /// Create an instance using [data] using the existing implementation
   factory NFCTagPlatform.instanceFor({
-    @required Map<String, dynamic> data,
+    required Map<String, dynamic> data,
   }) => NFCTagPlatform.instance.delegateFor(data: data);
 
   static final Object _token = Object();
@@ -26,7 +26,7 @@ abstract class NFCTagPlatform extends NFCInterface {
   static NFCTagPlatform get instance =>
       _instance ??= _MethodChannelNFCTag.instance;
 
-  static NFCTagPlatform _instance;
+  static NFCTagPlatform? _instance;
 
   /// Sets the [NFCTagPlatform.instance]
   static set instance(NFCTagPlatform instance) {
@@ -36,7 +36,7 @@ abstract class NFCTagPlatform extends NFCInterface {
 
   /// Enables delegates to create new instances of themselves.
   @protected
-  NFCTagPlatform delegateFor({ @required Map<String, dynamic> data }) {
+  NFCTagPlatform delegateFor({ required Map<String, dynamic> data }) {
     throw UnimplementedError('delegateFor() is not implemented');
   }
 

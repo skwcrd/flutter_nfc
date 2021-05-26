@@ -7,17 +7,17 @@ class Iso15693 extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   Iso15693._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.icManufacturerCode,
-    this.icSerialNumber,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.icManufacturerCode,
+    required this.icSerialNumber,
   }) : super._(delegate);
 
   /// Get an instance of `Iso15693` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Iso15693`.
-  factory Iso15693._from({
-    @required NFCTagPlatform delegate,
+  static Iso15693? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotIso15693 ) {
       return null;
@@ -27,11 +27,9 @@ class Iso15693 extends NFCTag {
 
     return Iso15693._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      icManufacturerCode: _data['icManufacturerCode'] as int,
-      icSerialNumber: Uint8List.fromList(
-        _data['icSerialNumber'] as List<int>));
+      identifier: _data['identifier'],
+      icManufacturerCode: _data['icManufacturerCode'],
+      icSerialNumber: _data['icSerialNumber']);
   }
 
   /// The value from [NFCISO15693Tag#identifier] on iOS.
@@ -47,8 +45,8 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#readSingleBlock] API on iOS.
   Future<Uint8List> readSingleBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -56,15 +54,16 @@ class Iso15693 extends NFCTag {
           'method': 'readSingleBlock',
           'requestFlags': requestFlags.map((e) => e.value).toList(),
           'blockNumber': blockNumber.toUnsigned(8),
-        });
+        })
+        .then((value) => value!);
 
   /// Sends the `Write Single Block` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#writeSingleBlock] API on iOS.
   Future<void> writeSingleBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    Uint8List dataBlock,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required Uint8List dataBlock,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -79,8 +78,8 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#lockBlock] API on iOS.
   Future<void> lockBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -94,9 +93,9 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#readMultipleBlocks] API on iOS.
   Future<List<Uint8List>> readMultipleBlocks({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    int numberOfBlocks,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required int numberOfBlocks,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -105,16 +104,18 @@ class Iso15693 extends NFCTag {
           'requestFlags': requestFlags.map((e) => e.value).toList(),
           'blockNumber': blockNumber,
           'numberOfBlocks': numberOfBlocks,
-        });
+        })
+        .then(
+          (value) => List<Uint8List>.from(value!));
 
   /// Sends the `Write Multiple Blocks` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#writeMultipleBlocks] API on iOS.
   Future<void> writeMultipleBlocks({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    int numberOfBlocks,
-    List<Uint8List> dataBlocks,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required int numberOfBlocks,
+    required List<Uint8List> dataBlocks,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -130,9 +131,9 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#getMultipleBlockSecurityStatus] API on iOS.
   Future<List<int>> getMultipleBlockSecurityStatus({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    int numberOfBlocks,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required int numberOfBlocks,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -141,14 +142,16 @@ class Iso15693 extends NFCTag {
           'requestFlags': requestFlags.map((e) => e.value).toList(),
           'blockNumber': blockNumber,
           'numberOfBlocks': numberOfBlocks,
-        });
+        })
+        .then(
+          (value) => List<int>.from(value!));
 
   /// Sends the `Write AFI` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#writeAFI] API on iOS.
   Future<void> writeAfi({
-    Set<Iso15693RequestFlag> requestFlags,
-    int afi,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int afi,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -162,7 +165,7 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#lockAFI] API on iOS.
   Future<void> lockAfi({
-    Set<Iso15693RequestFlag> requestFlags,
+    required Set<Iso15693RequestFlag> requestFlags,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -175,8 +178,8 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#writeDSFID] API on iOS.
   Future<void> writeDsfId({
-    Set<Iso15693RequestFlag> requestFlags,
-    int dsfId,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int dsfId,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -190,7 +193,7 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#lockDSFID] API on iOS.
   Future<void> lockDsfId({
-    Set<Iso15693RequestFlag> requestFlags,
+    required Set<Iso15693RequestFlag> requestFlags,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -203,7 +206,7 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#resetToReady] API on iOS.
   Future<void> resetToReady({
-    Set<Iso15693RequestFlag> requestFlags,
+    required Set<Iso15693RequestFlag> requestFlags,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -216,7 +219,7 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#select] API on iOS.
   Future<void> select({
-    Set<Iso15693RequestFlag> requestFlags,
+    required Set<Iso15693RequestFlag> requestFlags,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -238,9 +241,9 @@ class Iso15693 extends NFCTag {
   /// Sends the `Extended Read Single Block` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#extendedReadSingleBlock] API on iOS.
-  Future<Uint8List> extendedReadSingleBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
+  Future<Uint8List?> extendedReadSingleBlock({
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -254,9 +257,9 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#extendedWriteSingleBlock] API on iOS.
   Future<void> extendedWriteSingleBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    Uint8List dataBlock,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required Uint8List dataBlock,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -271,8 +274,8 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#extendedLockBlock] API on iOS.
   Future<void> extendedLockBlock({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -286,9 +289,9 @@ class Iso15693 extends NFCTag {
   ///
   /// This uses [NFCISO15693Tag#extendedReadMultipleBlocks] API on iOS.
   Future<List<Uint8List>> extendedReadMultipleBlocks({
-    Set<Iso15693RequestFlag> requestFlags,
-    int blockNumber,
-    int numberOfBlocks,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int blockNumber,
+    required int numberOfBlocks,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -297,15 +300,17 @@ class Iso15693 extends NFCTag {
           'requestFlags': requestFlags.map((e) => e.value).toList(),
           'blockNumber': blockNumber,
           'numberOfBlocks': numberOfBlocks,
-        });
+        })
+        .then(
+          (value) => List<Uint8List>.from(value!));
 
   /// Sends the `Get System Info` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#getSystemInfo] API on iOS.
   Future<Iso15693SystemInfo> getSystemInfo({
-    Set<Iso15693RequestFlag> requestFlags,
+    required Set<Iso15693RequestFlag> requestFlags,
   }) =>
-      channel.invokeMethod<Map>(
+      channel.invokeMethod(
         "Iso15693", {
           'handle': handle,
           'method': 'getSystemInfo',
@@ -313,15 +318,15 @@ class Iso15693 extends NFCTag {
         })
         .then(
           (value) => Iso15693SystemInfo.fromMap(
-            Map<String, dynamic>.from(value)));
+            Map<String, dynamic>.from(value!)));
 
   /// Sends the `Custom` command to the tag.
   ///
   /// This uses [NFCISO15693Tag#customCommand] API on iOS.
   Future<Uint8List> customCommand({
-    Set<Iso15693RequestFlag> requestFlags,
-    int customCommandCode,
-    Uint8List customRequestParameters,
+    required Set<Iso15693RequestFlag> requestFlags,
+    required int customCommandCode,
+    required Uint8List customRequestParameters,
   }) =>
       channel.invokeMethod(
         "Iso15693", {
@@ -330,7 +335,8 @@ class Iso15693 extends NFCTag {
           'requestFlags': requestFlags.map((e) => e.value).toList(),
           'customCommandCode': customCommandCode,
           'customRequestParameters': customRequestParameters,
-        });
+        })
+        .then((value) => value!);
 
   @override
   String toString() =>

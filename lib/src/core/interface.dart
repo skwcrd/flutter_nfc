@@ -1,14 +1,12 @@
 library core.interface;
 
-import 'package:flutter/foundation.dart'
-  show required;
 import 'package:flutter/services.dart'
   show MethodChannel;
 
 abstract class NFCInterface {
   /// Pass a private, class-specific `const Object()` as the `token`.
   NFCInterface({
-    @required Object token,
+    required Object token,
   }) : _instanceToken = token;
 
   static const MethodChannel _channel =
@@ -29,7 +27,7 @@ abstract class NFCInterface {
   static void verifyToken(NFCInterface instance, Object token) {
     if ( !identical(token, instance._instanceToken) ) {
       throw AssertionError(
-          'Platform interfaces must not be implemented with `implements`');
+        'Platform interfaces must not be implemented with `implements`');
     }
   }
 }

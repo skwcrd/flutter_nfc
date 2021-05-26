@@ -1,7 +1,5 @@
 library flutter_nfc;
 
-import 'package:flutter/foundation.dart'
-  show required;
 import 'package:flutter/services.dart'
   show PlatformException;
 
@@ -12,7 +10,7 @@ class FlutterNfc {
   FlutterNfc._();
 
   /// Cached instances of [FlutterNfc].
-  static FlutterNfc _flutterNfcInstance;
+  static FlutterNfc? _flutterNfcInstance;
 
   /// A Singleton instance of FlutterNfc.
   /// Returns an instance.
@@ -23,7 +21,7 @@ class FlutterNfc {
   /// Cached and lazily loaded instance of [NFCPlatform] to avoid
   /// creating a `MethodChannelNFCSession` when not needed or creating an
   /// instance with the default app before a user specifies an app.
-  NFCPlatform _delegatePackingProperty;
+  NFCPlatform? _delegatePackingProperty;
 
   /// Returns the underlying delegate implementation.
   ///
@@ -42,14 +40,13 @@ class FlutterNfc {
         message: "NFC features are not available, "
           "fail code: ${error.code}, message error: ${error.message}",
         details: error.details,
-        stacktrace: error.stacktrace ?? stackTrace?.toString());
+        stacktrace: error.stacktrace ?? stackTrace.toString());
     } catch (error, stackTrace) {
       throw PlatformException(
         code: "isAvailable",
         message: "NFC features are not available",
         details: error,
-        stacktrace: stackTrace?.toString()
-          ?? StackTrace.current.toString());
+        stacktrace: stackTrace.toString());
     }
   }
 
@@ -63,14 +60,13 @@ class FlutterNfc {
         message: "Open setting for enable NFC features, "
           "fail code: ${error.code}, message error: ${error.message}",
         details: error.details,
-        stacktrace: error.stacktrace ?? stackTrace?.toString());
+        stacktrace: error.stacktrace ?? stackTrace.toString());
     } catch (error, stackTrace) {
       throw PlatformException(
         code: "openSetting",
         message: "Open setting for enable NFC features",
         details: error,
-        stacktrace: stackTrace?.toString()
-          ?? StackTrace.current.toString());
+        stacktrace: stackTrace.toString());
     }
   }
 
@@ -95,10 +91,10 @@ class FlutterNfc {
   /// `onError` is called when the session stops
   /// for any reason after the session started.
   Future<void> startSession({
-    @required TagCallback onTagDiscovered,
-    Set<NFCTagPollingOption> pollingOption,
-    String alertMessage,
-    ErrorCallback onError,
+    required TagCallback onTagDiscovered,
+    Set<NFCTagPollingOption>? pollingOption,
+    String? alertMessage,
+    ErrorCallback? onError,
   }) {
     try {
       return _delegate.startSession(
@@ -113,14 +109,13 @@ class FlutterNfc {
         message: "NFC features cannot open NFC tag session, "
           "fail code: ${error.code}, message error: ${error.message}",
         details: error.details,
-        stacktrace: error.stacktrace ?? stackTrace?.toString());
+        stacktrace: error.stacktrace ?? stackTrace.toString());
     } catch (error, stackTrace) {
       throw PlatformException(
         code: "startSession",
         message: "NFC features cannot open NFC tag session",
         details: error,
-        stacktrace: stackTrace?.toString()
-          ?? StackTrace.current.toString());
+        stacktrace: stackTrace.toString());
     }
   }
 
@@ -140,8 +135,8 @@ class FlutterNfc {
   ///
   /// When both are used, `errorMessage` has priority.
   Future<void> stopSession({
-    String errorMessage,
-    String alertMessage,
+    String? errorMessage,
+    String? alertMessage,
   }) {
     try {
       return _delegate.stopSession(
@@ -153,14 +148,13 @@ class FlutterNfc {
         message: "NFC features cannot close NFC tag session, "
           "fail code: ${error.code}, message error: ${error.message}",
         details: error.details,
-        stacktrace: error.stacktrace ?? stackTrace?.toString());
+        stacktrace: error.stacktrace ?? stackTrace.toString());
     } catch (error, stackTrace) {
       throw PlatformException(
         code: "stopSession",
         message: "NFC features cannot close NFC tag session",
         details: error,
-        stacktrace: stackTrace?.toString()
-          ?? StackTrace.current.toString());
+        stacktrace: stackTrace.toString());
     }
   }
 }

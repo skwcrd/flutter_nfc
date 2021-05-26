@@ -7,19 +7,19 @@ class Iso7816 extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   Iso7816._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.initialSelectedAID,
-    this.historicalBytes,
-    this.applicationData,
-    this.proprietaryApplicationDataCoding,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.initialSelectedAID,
+    required this.historicalBytes,
+    required this.applicationData,
+    required this.proprietaryApplicationDataCoding,
   }) : super._(delegate);
 
   /// Get an instance of `Iso7816` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Iso7816`.
-  factory Iso7816._from({
-    @required NFCTagPlatform delegate,
+  static Iso7816? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotIso7816 ) {
       return null;
@@ -29,15 +29,12 @@ class Iso7816 extends NFCTag {
 
     return Iso7816._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      historicalBytes: Uint8List.fromList(
-        _data['historicalBytes'] as List<int>),
-      applicationData: Uint8List.fromList(
-        _data['applicationData'] as List<int>),
-      initialSelectedAID: _data['initialSelectedAID']?.toString(),
+      identifier: _data['identifier'],
+      historicalBytes: _data['historicalBytes'],
+      applicationData: _data['applicationData'],
+      initialSelectedAID: _data['initialSelectedAID'],
       proprietaryApplicationDataCoding:
-          _data['proprietaryApplicationDataCoding'] as bool);
+          _data['proprietaryApplicationDataCoding']);
   }
 
   /// The value from [NFCISO7816Tag#identifier] on iOS.
@@ -59,14 +56,14 @@ class Iso7816 extends NFCTag {
   ///
   /// This uses [NFCISO7816Tag#sendCommand] API on iOS.
   Future<Iso7816ResponseApdu> sendCommand({
-    int instructionClass,
-    int instructionCode,
-    int p1Parameter,
-    int p2Parameter,
-    Uint8List data,
-    int expectedResponseLength,
+    required int instructionClass,
+    required int instructionCode,
+    required int p1Parameter,
+    required int p2Parameter,
+    required Uint8List data,
+    required int expectedResponseLength,
   }) =>
-      channel.invokeMethod<Map>(
+      channel.invokeMethod(
         'Iso7816', {
           'handle': handle,
           'method': 'sendCommand',
@@ -79,13 +76,13 @@ class Iso7816 extends NFCTag {
         })
         .then(
           (value) => Iso7816ResponseApdu.fromMap(
-            Map<String, dynamic>.from(value)));
+            Map<String, dynamic>.from(value!)));
 
   /// Sends the `APDU` to the tag.
   ///
   /// This uses [NFCISO7816Tag#sendCommand] API on iOS.
   Future<Iso7816ResponseApdu> sendCommandRaw(Uint8List data) =>
-      channel.invokeMethod<Map>(
+      channel.invokeMethod(
         'Iso7816', {
           'handle': handle,
           'method': 'sendCommandRaw',
@@ -93,7 +90,7 @@ class Iso7816 extends NFCTag {
         })
         .then(
           (value) => Iso7816ResponseApdu.fromMap(
-            Map<String, dynamic>.from(value)));
+            Map<String, dynamic>.from(value!)));
 
   @override
   String toString() =>

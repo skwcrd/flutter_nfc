@@ -7,18 +7,18 @@ class Ndef extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   Ndef._({
-    NFCTagPlatform delegate,
-    this.isWritable,
-    this.maxSize,
+    required NFCTagPlatform delegate,
+    required this.isWritable,
+    required this.maxSize,
+    required this.additionalData,
     this.cachedMessage,
-    this.additionalData,
   }) : super._(delegate);
 
   /// Get an instance of `Ndef` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NDEF`.
-  factory Ndef._from({
-    @required NFCTagPlatform delegate,
+  static Ndef? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotNdef ) {
       return null;
@@ -28,13 +28,13 @@ class Ndef extends NFCTag {
 
     return Ndef._(
       delegate: delegate,
-      isWritable: _data.remove('isWritable') as bool,
-      maxSize: _data.remove('maxSize') as int,
+      isWritable: _data.remove('isWritable'),
+      maxSize: _data.remove('maxSize'),
       cachedMessage: _data['cachedMessage'] == null
           ? null
           : NdefMessage.fromMap(
               Map<String, dynamic>.from(
-                _data.remove('cachedMessage') as Map)),
+                _data.remove('cachedMessage'))),
       additionalData: _data);
   }
 
@@ -50,21 +50,21 @@ class Ndef extends NFCTag {
   /// [NFCNDEFTag#read] on iOS.
   ///
   /// This value is cached at tag discovery.
-  final NdefMessage cachedMessage;
+  final NdefMessage? cachedMessage;
 
   /// The value represents some additional data.
   final Map<String, dynamic> additionalData;
 
   /// Read the current `NDEF` message on this tag.
   Future<NdefMessage> read() =>
-      channel.invokeMethod<Map>(
+      channel.invokeMethod(
         "Ndef", {
           'handle': handle,
           'method': 'read',
         })
         .then(
           (value) => NdefMessage.fromMap(
-            Map<String, dynamic>.from(value)));
+            Map<String, dynamic>.from(value!)));
 
   /// Write the `NDEF` message on this tag.
   Future<void> write(NdefMessage message) =>
@@ -74,12 +74,7 @@ class Ndef extends NFCTag {
           'method': 'write',
           'message': {
             'records': message.records
-              .map((e) => {
-                'typeNameFormat': e.typeNameFormat.value,
-                'type': e.type,
-                'identifier': e.identifier,
-                'payload': e.payload,
-              })
+              .map((e) => e.toMap())
               .toList(),
           },
         });

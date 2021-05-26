@@ -4,17 +4,16 @@ part of core.tag;
 class Iso7816ResponseApdu {
   /// Constructs an instance with the given values.
   const Iso7816ResponseApdu({
-    this.payload,
-    this.statusWord1,
-    this.statusWord2,
+    required this.payload,
+    required this.statusWord1,
+    required this.statusWord2,
   });
 
   factory Iso7816ResponseApdu.fromMap(Map<String, dynamic> arg) =>
       Iso7816ResponseApdu(
-        payload: Uint8List.fromList(
-          arg['payload'] as List<int>),
-        statusWord1: arg['statusWord1'] as int,
-        statusWord2: arg['statusWord2'] as int);
+        payload: arg['payload'],
+        statusWord1: arg['statusWord1'],
+        statusWord2: arg['statusWord2']);
 
   /// Payload.
   final Uint8List payload;

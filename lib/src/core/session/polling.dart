@@ -21,7 +21,7 @@ enum NFCTagPollingOption {
   iso18092,
 }
 
-extension NFCTagPollingOptionValue on NFCTagPollingOption {
+extension _NFCTagPollingOptionValue on NFCTagPollingOption {
   String get value {
     switch (this) {
       case NFCTagPollingOption.iso14443:

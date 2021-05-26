@@ -1,44 +1,45 @@
 part of core.session;
 
 class _MethodChannelNFCSession extends NFCPlatform {
-  _MethodChannelNFCSession._({
-    @required Future<dynamic> Function(MethodCall) handler
-  }) : super() {
-    if ( handler != null ) {
-      channel.setMethodCallHandler(handler);
-    }
-  }
+  _MethodChannelNFCSession._() : super._();
 
   /// Returns a stub instance to allow the platform interface
   /// to access the class instance statically.
   // ignore: prefer_constructors_over_static_methods
   static _MethodChannelNFCSession get instance =>
-      _MethodChannelNFCSession._(handler: null);
+      _MethodChannelNFCSession._();
 
-  static NFCPlatform _methodChannelNFCInstance;
+  static NFCPlatform? _methodChannelNFCInstance;
 
   @override
-  NFCPlatform delegate() =>
-      _methodChannelNFCInstance ??=
-          _MethodChannelNFCSession._(handler: _handleMethodCall);
+  NFCPlatform delegate() {
+    if ( _methodChannelNFCInstance == null ) {
+      channel.setMethodCallHandler(_handleMethodCall);
+      _methodChannelNFCInstance = _MethodChannelNFCSession._();
+    }
 
-  TagCallback _onTag;
-  ErrorCallback _onError;
+    return _methodChannelNFCInstance!;
+  }
+
+  TagCallback? _onTag;
+  ErrorCallback? _onError;
 
   @override
   Future<bool> isAvailable() =>
-      channel.invokeMethod("isAvailable");
+      channel
+        .invokeMethod("isAvailable")
+        .then((value) => value!);
 
   @override
   Future<void> openSetting() =>
-      channel.invokeMethod("isAvailable");
+      channel.invokeMethod("openSetting");
 
   @override
   Future<void> startSession({
-    @required TagCallback onTagDiscovered,
-    Set<NFCTagPollingOption> pollingOption,
-    String alertMessage,
-    ErrorCallback onError,
+    required TagCallback onTagDiscovered,
+    required Set<NFCTagPollingOption> pollingOption,
+    String? alertMessage,
+    ErrorCallback? onError,
   }) {
     _onTag = onTagDiscovered;
     _onError = onError;
@@ -52,8 +53,8 @@ class _MethodChannelNFCSession extends NFCPlatform {
 
   @override
   Future<void> stopSession({
-    String errorMessage,
-    String alertMessage,
+    String? errorMessage,
+    String? alertMessage,
   }) {
     _onTag = null;
     _onError = null;
@@ -90,9 +91,9 @@ class _MethodChannelNFCSession extends NFCPlatform {
     _onTag?.call(
       NFCTag.instanceFor(
         delegate: NFCTagPlatform.instanceFor(
-          data: Map<String, dynamic>.from(call.arguments as Map),
-        ),
-      ));
+          data: Map<String, dynamic>.from(
+            call.arguments as Map),
+        )));
   }
 
   void _handleOnError(MethodCall call) {

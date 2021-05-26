@@ -53,6 +53,9 @@ enum NFCTagType {
 
   /// `NFCISO15693Tag` on iOS.
   Iso15693,
+
+  /// The unexpected tag type has occurred.
+  unknown,
 }
 
 extension _NFCTagTypeValue on NFCTagType {
@@ -98,8 +101,7 @@ extension _NFCTagTypeValue on NFCTagType {
         return "Iso15693";
 
       default:
-        throw UnimplementedError(
-          "Unexpected NFC tag type value");
+        return "unknown";
     }
   }
 }
@@ -132,6 +134,9 @@ extension NFCTagTypeCompare on NFCTagType {
   bool get isIso15693 =>
       this == NFCTagType.Iso15693;
 
+  bool get isUnknown =>
+      this == NFCTagType.unknown;
+
   bool get isNotNdef =>
       this != NFCTagType.Ndef;
   bool get isNotNdefFormatable =>
@@ -158,4 +163,7 @@ extension NFCTagTypeCompare on NFCTagType {
       this != NFCTagType.Iso7816;
   bool get isNotIso15693 =>
       this != NFCTagType.Iso15693;
+
+  bool get isNotUnknown =>
+      this != NFCTagType.unknown;
 }

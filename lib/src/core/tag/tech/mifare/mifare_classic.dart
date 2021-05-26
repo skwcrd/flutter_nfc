@@ -7,22 +7,22 @@ class MifareClassic extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   MifareClassic._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.type,
-    this.blockCount,
-    this.sectorCount,
-    this.size,
-    this.maxTransceiveLength,
-    int timeout,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.type,
+    required this.blockCount,
+    required this.sectorCount,
+    required this.size,
+    required this.maxTransceiveLength,
+    required int timeout,
   }) :  _timeout = timeout,
         super._(delegate);
 
   /// Get an instance of `MifareClassic` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `MifareClassic`.
-  factory MifareClassic._from({
-    @required NFCTagPlatform delegate,
+  static MifareClassic? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotMifareClassic ) {
       return null;
@@ -32,14 +32,13 @@ class MifareClassic extends NFCTag {
 
     return MifareClassic._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      type: _data['type'] as int,
-      blockCount: _data['blockCount'] as int,
-      sectorCount: _data['sectorCount'] as int,
-      size: _data['size'] as int,
-      maxTransceiveLength: _data['maxTransceiveLength'] as int,
-      timeout: _data['timeout'] as int);
+      identifier: _data['identifier'],
+      type: _data['type'],
+      blockCount: _data['blockCount'],
+      sectorCount: _data['sectorCount'],
+      size: _data['size'],
+      maxTransceiveLength: _data['maxTransceiveLength'],
+      timeout: _data['timeout']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -69,8 +68,8 @@ class MifareClassic extends NFCTag {
   ///
   /// This uses [MifareClassic#authenticateSectorWithKeyA] API on Android.
   Future<bool> authenticateSectorWithKeyA({
-    int sectorIndex,
-    Uint8List key,
+    required int sectorIndex,
+    required Uint8List key,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -78,14 +77,15 @@ class MifareClassic extends NFCTag {
           'method': 'authenticateSectorWithKeyA',
           'sectorIndex': sectorIndex,
           'key': key,
-        });
+        })
+        .then((value) => value!);
 
   /// Sends the `Authenticate Sector With Key B` command to the tag.
   ///
   /// This uses [MifareClassic#authenticateSectorWithKeyB] API on Android.
   Future<bool> authenticateSectorWithKeyB({
-    int sectorIndex,
-    Uint8List key,
+    required int sectorIndex,
+    required Uint8List key,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -93,14 +93,15 @@ class MifareClassic extends NFCTag {
           'method': 'authenticateSectorWithKeyB',
           'sectorIndex': sectorIndex,
           'key': key,
-        });
+        })
+        .then((value) => value!);
 
   /// Sends the `Increment` command to the tag.
   ///
   /// This uses [MifareClassic#increment] API on Android.
   Future<void> increment({
-    int blockIndex,
-    int value,
+    required int blockIndex,
+    required int value,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -114,8 +115,8 @@ class MifareClassic extends NFCTag {
   ///
   /// This uses [MifareClassic#decrement] API on Android.
   Future<void> decrement({
-    int blockIndex,
-    int value,
+    required int blockIndex,
+    required int value,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -129,21 +130,22 @@ class MifareClassic extends NFCTag {
   ///
   /// This uses [MifareClassic#readBlock] API on Android.
   Future<Uint8List> readBlock({
-    int blockIndex,
+    required int blockIndex,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
           'handle': handle,
           'method': 'readBlock',
           'blockIndex': blockIndex,
-        });
+        })
+        .then((value) => value!);
 
   /// Sends the `Write Block` command to the tag.
   ///
   /// This uses [MifareClassic#writeBlock] API on Android.
   Future<void> writeBlock({
-    int blockIndex,
-    Uint8List data,
+    required int blockIndex,
+    required Uint8List data,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -157,7 +159,7 @@ class MifareClassic extends NFCTag {
   ///
   /// This uses [MifareClassic#restore] API on Android.
   Future<void> restore({
-    int blockIndex,
+    required int blockIndex,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -170,7 +172,7 @@ class MifareClassic extends NFCTag {
   ///
   /// This uses [MifareClassic#transfer] API on Android.
   Future<void> transfer({
-    int blockIndex,
+    required int blockIndex,
   }) =>
       channel.invokeMethod(
         "MifareClassic", {
@@ -185,25 +187,21 @@ class MifareClassic extends NFCTag {
   /// This is equivalent to obtaining via `NfcA` this tag
   /// and calling `NfcA#transceive`.
   Future<List<int>> transceive({
-    @required int data,
-    int timeout,
-  }) async {
-    assert(
-      data != null,
-      'data cannot be null');
-
+    required int data,
+    int? timeout,
+  }) {
     timeout ??= _timeout;
     _timeout = timeout;
 
-    return Int8List.fromList(
-      await channel.invokeMethod(
-        "MifareClassic", {
-          'handle': handle,
-          'method': 'transceive',
-          'data': data,
-          'timeout': timeout,
-        }))
-        .toList();
+    return channel.invokeMethod(
+      "MifareClassic", {
+        'handle': handle,
+        'method': 'transceive',
+        'data': data,
+        'timeout': timeout,
+      })
+      .then(
+        (value) => List<int>.from(value!));
   }
 
   @override

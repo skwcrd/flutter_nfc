@@ -7,7 +7,7 @@ abstract class NfcError extends Error {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   NfcError({
-    @required Object type,
+    required Object type,
     this.message,
     this.details,
   }) :  _type = type;
@@ -16,7 +16,7 @@ abstract class NfcError extends Error {
   final Object _type;
 
   /// The error message.
-  final String message;
+  final String? message;
 
   /// The error details information.
   final dynamic details;

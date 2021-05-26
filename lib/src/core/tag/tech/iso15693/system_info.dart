@@ -4,22 +4,22 @@ part of core.tag;
 class Iso15693SystemInfo {
   /// Constructs an instance with the given values.
   const Iso15693SystemInfo({
-    this.applicationFamilyIdentifier,
-    this.blockSize,
-    this.dataStorageFormatIdentifier,
-    this.icReference,
-    this.totalBlocks,
+    required this.applicationFamilyIdentifier,
+    required this.blockSize,
+    required this.dataStorageFormatIdentifier,
+    required this.icReference,
+    required this.totalBlocks,
   });
 
   factory Iso15693SystemInfo.fromMap(Map<String, dynamic> arg) =>
       Iso15693SystemInfo(
         dataStorageFormatIdentifier:
-            arg['dataStorageFormatIdentifier'] as int,
+            arg['dataStorageFormatIdentifier'],
         applicationFamilyIdentifier:
-            arg['applicationFamilyIdentifier'] as int,
-        blockSize: arg['blockSize'] as int,
-        totalBlocks: arg['totalBlocks'] as int,
-        icReference: arg['icReference'] as int);
+            arg['applicationFamilyIdentifier'],
+        blockSize: arg['blockSize'],
+        totalBlocks: arg['totalBlocks'],
+        icReference: arg['icReference']);
 
   /// Application Family Identifier.
   final int applicationFamilyIdentifier;

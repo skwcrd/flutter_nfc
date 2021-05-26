@@ -7,20 +7,20 @@ class NfcA extends NFCTag {
   /// The instances constructs by this way are not valid in
   /// the production environment.
   NfcA._({
-    @required NFCTagPlatform delegate,
-    this.identifier,
-    this.atqa,
-    this.sak,
-    this.maxTransceiveLength,
-    int timeout,
+    required NFCTagPlatform delegate,
+    required this.identifier,
+    required this.atqa,
+    required this.sak,
+    required this.maxTransceiveLength,
+    required int timeout,
   }) :  _timeout = timeout,
         super._(delegate);
 
   /// Get an instance of `NfcA` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcA`.
-  factory NfcA._from({
-    @required NFCTagPlatform delegate,
+  static NfcA? _from({
+    required NFCTagPlatform delegate,
   }) {
     if ( delegate.type.isNotNfcA ) {
       return null;
@@ -30,13 +30,11 @@ class NfcA extends NFCTag {
 
     return NfcA._(
       delegate: delegate,
-      identifier: Uint8List.fromList(
-        _data['identifier'] as List<int>),
-      atqa: Uint8List.fromList(
-        _data['atqa'] as List<int>),
-      sak: _data['sak'] as int,
-      maxTransceiveLength: _data['maxTransceiveLength'] as int,
-      timeout: _data['timeout'] as int);
+      identifier: _data['identifier'],
+      atqa: _data['atqa'],
+      sak: _data['sak'],
+      maxTransceiveLength: _data['maxTransceiveLength'],
+      timeout: _data['timeout']);
   }
 
   /// The value from [Tag#id] on Android.
@@ -60,25 +58,21 @@ class NfcA extends NFCTag {
   ///
   /// This uses [NfcA#transceive] API on Android.
   Future<List<int>> transceive({
-    @required Uint8List data,
-    int timeout,
-  }) async {
-    assert(
-      data != null && data.isNotEmpty,
-      'data cannot be null and empty');
-
+    required Uint8List data,
+    int? timeout,
+  }) {
     timeout ??= _timeout;
     _timeout = timeout;
 
-    return Int8List.fromList(
-      await channel.invokeMethod(
-        "transceive", {
-          'handle': handle,
-          'type': 'NfcA',
-          'data': data,
-          'timeout': timeout,
-        }))
-        .toList();
+    return channel.invokeMethod(
+      "transceive", {
+        'handle': handle,
+        'type': 'NfcA',
+        'data': data,
+        'timeout': timeout,
+      })
+      .then(
+        (value) => Int8List.fromList(value!).toList());
   }
 
   @override
