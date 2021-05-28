@@ -1,15 +1,6 @@
-library flutter_nfc;
-
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-class FlutterNfc {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_nfc');
-
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-}
+export 'src/core/session/session.dart'
+  show NFCTagPollingOption;
+export 'src/core/tag/tag.dart'
+  hide NFCTagPlatform;
+export 'src/flutter_nfc.dart';
+export 'src/utils/utils.dart';

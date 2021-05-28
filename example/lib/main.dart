@@ -1,59 +1,49 @@
-import 'dart:async';
+library main;
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:async'
+  show runZonedGuarded;
 
-import 'package:flutter_nfc/flutter_nfc.dart';
+import 'package:flutter/material.dart'
+  show Colors;
+import 'package:flutter/services.dart'
+  show
+    SystemChrome,
+    SystemUiOverlayStyle;
+import 'package:flutter/widgets.dart'
+  show
+    runApp,
+    WidgetsFlutterBinding;
+import 'package:flutter/foundation.dart'
+  show
+    FlutterError,
+    ErrorDescription,
+    FlutterErrorDetails;
+
+import 'src/app.dart';
 
 void main() {
-  runApp(ExampleApp());
-}
+  WidgetsFlutterBinding.ensureInitialized();
 
-class ExampleApp extends StatefulWidget {
-  @override
-  _ExampleAppState createState() => _ExampleAppState();
-}
-
-class _ExampleAppState extends State<ExampleApp> {
-  String _platformVersion = 'Unknown';
-
-  @override
-  void initState() {
-    super.initState();
-    _initPlatformState();
-  }
-
-  Future<void> _initPlatformState() async {
-    String platformVersion;
-
-    try {
-      platformVersion = await FlutterNfc.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    if ( mounted ) {
-      setState(() {
-        _platformVersion = platformVersion;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Plugin example app',
-          ),
-        ),
-        body: Center(
-          child: Text(
-            'Running on: $_platformVersion',
-          ),
-        ),
+  runZonedGuarded(() async {
+    /// mobile setup [SystemChrome] application
+    /// orientation to portrait only.
+    ///
+    /// and set [OverlayStyle] for status bar
+    /// on mobile, when used application.
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.transparent,
       ),
     );
-  }
+
+    runApp(const App());
+  }, (error, stackTrace) {
+    FlutterError.reportError(
+      FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace,
+        library: "NFC Example Exception",
+        context: ErrorDescription(
+          "Error on runZonedGuarded in main()")));
+  });
 }
