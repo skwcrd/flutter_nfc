@@ -18,24 +18,17 @@ class Iso7816 extends NFCTag {
   /// Get an instance of `Iso7816` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Iso7816`.
-  static Iso7816? _from({
+  factory Iso7816._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotIso7816 ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return Iso7816._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      historicalBytes: _data['historicalBytes'],
-      applicationData: _data['applicationData'],
-      initialSelectedAID: _data['initialSelectedAID'],
-      proprietaryApplicationDataCoding:
-          _data['proprietaryApplicationDataCoding']);
-  }
+  }) => Iso7816._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          historicalBytes: _data['historicalBytes'],
+          applicationData: _data['applicationData'],
+          initialSelectedAID: _data['initialSelectedAID'],
+          proprietaryApplicationDataCoding:
+              _data['proprietaryApplicationDataCoding']);
 
   /// The value from [NFCISO7816Tag#identifier] on iOS.
   final Uint8List identifier;

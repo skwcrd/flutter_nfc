@@ -19,23 +19,16 @@ class NfcF extends NFCTag {
   /// Get an instance of `NfcF` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcF`.
-  static NfcF? _from({
+  factory NfcF._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotNfcF ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return NfcF._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      manufacturer: _data['manufacturer'],
-      systemCode: _data['systemCode'],
-      maxTransceiveLength: _data['maxTransceiveLength'],
-      timeout: _data['timeout']);
-  }
+  }) => NfcF._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          manufacturer: _data['manufacturer'],
+          systemCode: _data['systemCode'],
+          maxTransceiveLength: _data['maxTransceiveLength'],
+          timeout: _data['timeout']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

@@ -86,7 +86,12 @@ internal class TagManager: NSObject {
                     ndefData["cachedMessage"] = getNDEFMessageMap(message)
                 }
 
-                data["ndef"] = ndefData
+                data["Ndef"] = ndefData
+
+                var techList = data["techList"] as! [String]
+                techList.append("Ndef")
+
+                data["techList"] = techList
 
                 completionHandler(data, nil)
             }
@@ -95,27 +100,27 @@ internal class TagManager: NSObject {
 
     @available(iOS 13.0, *)
     private func getTagMap(_ arg: NFCNDEFTag) -> [String: [String: Any?]] {
-        if let arg = arg as? NFCFeliCaTag {
+        if let arg = arg as? NFCMiFareTag {
             return [
-                "type": "felica",
-                "data": [
+                "techList": [ "Mifare" ],
+                "Mifare": [
+                    "historicalBytes": arg.historicalBytes,
+                    "identifier": arg.identifier,
+                    "mifareFamily": arg.mifareFamily.rawValue
+                ]
+            ]
+        } else if let arg = arg as? NFCFeliCaTag {
+            return [
+                "techList": [ "Felica" ],
+                "Felica": [
                     "currentIDm": arg.currentIDm,
                     "currentSystemCode": arg.currentSystemCode
                 ]
             ]
-        } else if let arg = arg as? NFCISO15693Tag {
-            return [
-                "type": "iso15693",
-                "data": [
-                    "icManufacturerCode": arg.icManufacturerCode,
-                    "icSerialNumber": arg.icSerialNumber,
-                    "identifier": arg.identifier
-                ]
-            ]
         } else if let arg = arg as? NFCISO7816Tag {
             return [
-                "type": "iso7816",
-                "data": [
+                "techList": [ "Iso7816" ],
+                "Iso7816": [
                     "applicationData": arg.applicationData,
                     "historicalBytes": arg.historicalBytes,
                     "identifier": arg.identifier,
@@ -123,13 +128,13 @@ internal class TagManager: NSObject {
                     "proprietaryApplicationDataCoding": arg.proprietaryApplicationDataCoding
                 ]
             ]
-        } else if let arg = arg as? NFCMiFareTag {
+        } else if let arg = arg as? NFCISO15693Tag {
             return [
-                "type": "mifare",
-                "data": [
-                    "historicalBytes": arg.historicalBytes,
-                    "identifier": arg.identifier,
-                    "mifareFamily": arg.mifareFamily.rawValue
+                "techList": [ "Iso15693" ],
+                "Iso15693": [
+                    "icManufacturerCode": arg.icManufacturerCode,
+                    "icSerialNumber": arg.icSerialNumber,
+                    "identifier": arg.identifier
                 ]
             ]
         } else {

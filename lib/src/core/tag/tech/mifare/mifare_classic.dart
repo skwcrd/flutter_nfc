@@ -21,25 +21,18 @@ class MifareClassic extends NFCTag {
   /// Get an instance of `MifareClassic` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `MifareClassic`.
-  static MifareClassic? _from({
+  factory MifareClassic._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotMifareClassic ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return MifareClassic._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      type: _data['type'],
-      blockCount: _data['blockCount'],
-      sectorCount: _data['sectorCount'],
-      size: _data['size'],
-      maxTransceiveLength: _data['maxTransceiveLength'],
-      timeout: _data['timeout']);
-  }
+  }) => MifareClassic._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          type: _data['type'],
+          blockCount: _data['blockCount'],
+          sectorCount: _data['sectorCount'],
+          size: _data['size'],
+          maxTransceiveLength: _data['maxTransceiveLength'],
+          timeout: _data['timeout']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

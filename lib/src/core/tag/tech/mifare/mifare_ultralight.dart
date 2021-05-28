@@ -18,22 +18,15 @@ class MifareUltralight extends NFCTag {
   /// Get an instance of `MifareUltralight` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `MifareUltralight`.
-  static MifareUltralight? _from({
+  factory MifareUltralight._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotMifareUltralight ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return MifareUltralight._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      type: _data['type'],
-      maxTransceiveLength: _data['maxTransceiveLength'],
-      timeout: _data['timeout']);
-  }
+  }) => MifareUltralight._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          type: _data['type'],
+          maxTransceiveLength: _data['maxTransceiveLength'],
+          timeout: _data['timeout']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

@@ -15,20 +15,13 @@ class Felica extends NFCTag {
   /// Get an instance of `Felica` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Felica`.
-  static Felica? _from({
+  factory Felica._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotFelica ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return Felica._(
-      delegate: delegate,
-      currentSystemCode: _data['currentSystemCode'],
-      currentIDm: _data['currentIDm']);
-  }
+  }) => Felica._(
+          delegate: delegate,
+          currentSystemCode: _data['currentSystemCode'],
+          currentIDm: _data['currentIDm']);
 
   /// The value from [NFCFeliCaTag#currentSystemCode] on iOS.
   final Uint8List currentSystemCode;

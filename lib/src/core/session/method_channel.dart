@@ -1,7 +1,9 @@
 part of core.session;
 
 class _MethodChannelNFCSession extends NFCPlatform {
-  _MethodChannelNFCSession._() : super._();
+  _MethodChannelNFCSession._() : super._() {
+    channel.setMethodCallHandler(_handleMethodCall);
+  }
 
   /// Returns a stub instance to allow the platform interface
   /// to access the class instance statically.
@@ -12,14 +14,8 @@ class _MethodChannelNFCSession extends NFCPlatform {
   static NFCPlatform? _methodChannelNFCInstance;
 
   @override
-  NFCPlatform delegate() {
-    if ( _methodChannelNFCInstance == null ) {
-      channel.setMethodCallHandler(_handleMethodCall);
-      _methodChannelNFCInstance = _MethodChannelNFCSession._();
-    }
-
-    return _methodChannelNFCInstance!;
-  }
+  NFCPlatform delegate() =>
+      _methodChannelNFCInstance ??= _MethodChannelNFCSession._();
 
   TagCallback? _onTag;
   ErrorCallback? _onError;
@@ -55,7 +51,7 @@ class _MethodChannelNFCSession extends NFCPlatform {
   Future<void> stopSession({
     String? errorMessage,
     String? alertMessage,
-  }) {
+  }) async {
     _onTag = null;
     _onError = null;
 
@@ -88,18 +84,18 @@ class _MethodChannelNFCSession extends NFCPlatform {
   }
 
   void _handleOnTagDiscovered(MethodCall call) {
-    _onTag?.call(
-      NFCTag.instanceFor(
-        delegate: NFCTagPlatform.instanceFor(
-          data: Map<String, dynamic>.from(
-            call.arguments as Map),
-        )));
+    final _tag = NFCTag.instanceFor(
+      delegate: NFCTagPlatform.instanceFor(
+        data: Map<String, dynamic>.from(call.arguments as Map),
+      ));
+
+    _onTag?.call(_tag);
   }
 
   void _handleOnError(MethodCall call) {
-    _onError?.call(
-      SessionError.fromMap(
-        Map<String, dynamic>.from(
-          call.arguments as Map)));
+    final _error = SessionError.fromMap(
+      Map<String, dynamic>.from(call.arguments as Map));
+
+    _onError?.call(_error);
   }
 }

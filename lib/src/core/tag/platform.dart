@@ -46,8 +46,8 @@ abstract class NFCTagPlatform extends NFCInterface {
   }
 
   /// The raw values about this tag obtained from the native platform.
-  NFCTagType get type {
-    throw UnimplementedError('type is not implemented');
+  List<NFCTagType> get techList {
+    throw UnimplementedError('techList is not implemented');
   }
 
   Future<void> disposeTag() {

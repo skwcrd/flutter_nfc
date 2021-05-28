@@ -31,7 +31,7 @@ class NfcSession(
 
     fun isAvailable(/*call: MethodCall, */result: Result) {
         result.success(
-            adapter?.isEnabled == true)
+            adapter?.isEnabled ?: false)
     }
 
     fun startSession(call: MethodCall, result: Result) {
@@ -43,7 +43,7 @@ class NfcSession(
             return
         }
 
-        val pollingOption: List<String> = call.argument<List<String>>("pollingOption")!!
+        val pollingOption = call.argument<List<String>>("pollingOption")!!
 
         adapter.enableReaderMode(activity, this, getFlags(pollingOption), null)
         result.success(null)

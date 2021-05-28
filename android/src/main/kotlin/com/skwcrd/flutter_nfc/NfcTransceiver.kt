@@ -28,6 +28,9 @@ class NfcTransceiver(
     private fun nfcATransceive(call: MethodCall, result: Result) {
         tagManager.tagHandler(call, result, { NfcA.get(it) }) {
             val data = call.argument<ByteArray>("data")!!
+            val timeout = call.argument<Int>("timeout")!!
+
+            it.timeout = timeout
 
             result.success(
                 it.transceive(data))
@@ -46,6 +49,9 @@ class NfcTransceiver(
     private fun nfcFTransceive(call: MethodCall, result: Result) {
         tagManager.tagHandler(call, result, { NfcF.get(it) }) {
             val data = call.argument<ByteArray>("data")!!
+            val timeout = call.argument<Int>("timeout")!!
+
+            it.timeout = timeout
 
             result.success(
                 it.transceive(data))
@@ -64,6 +70,9 @@ class NfcTransceiver(
     private fun isoDepTransceive(call: MethodCall, result: Result) {
         tagManager.tagHandler(call, result, { IsoDep.get(it) }) {
             val data = call.argument<ByteArray>("data")!!
+            val timeout = call.argument<Int>("timeout")!!
+
+            it.timeout = timeout
 
             result.success(
                 it.transceive(data))

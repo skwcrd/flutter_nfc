@@ -23,10 +23,11 @@ class SessionError extends NfcError {
       type: SessionErrorType.values.firstWhere(
         (type) => type.value == arg['type'],
         orElse: () => SessionErrorType.unknown),
-      message: arg['message'].toString(),
+      message: arg['message'],
       details: arg['details']);
 
   /// The session error type.
+  @override
   SessionErrorType get type {
     if ( _type is SessionErrorType ) {
       return _type as SessionErrorType;

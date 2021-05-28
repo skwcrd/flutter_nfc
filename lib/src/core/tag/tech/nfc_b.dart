@@ -17,22 +17,15 @@ class NfcB extends NFCTag {
   /// Get an instance of `NfcB` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcB`.
-  static NfcB? _from({
+  factory NfcB._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotNfcB ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return NfcB._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      applicationData: _data['applicationData'],
-      protocolInfo: _data['protocolInfo'],
-      maxTransceiveLength: _data['maxTransceiveLength']);
-  }
+  }) => NfcB._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          applicationData: _data['applicationData'],
+          protocolInfo: _data['protocolInfo'],
+          maxTransceiveLength: _data['maxTransceiveLength']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

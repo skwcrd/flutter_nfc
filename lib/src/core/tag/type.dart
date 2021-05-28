@@ -15,7 +15,8 @@ part of core.tag;
 ///  * Iso7816 (iOS)
 ///  * Iso15693 (iOS)
 enum NFCTagType {
-  /// `NDEF` on Android, `NFCNDEFTag` on iOS.
+  /// `NDEF` on Android,
+  /// `NFCNDEFTag` on iOS.
   Ndef,
 
   /// `NDEF` formatable on Android.

@@ -59,12 +59,18 @@ class TagManager/*(private val activity: Activity)*/ {
     fun getTagMap(tag: Tag): Map<String, Any?> {
         val handle = tag.id.toString()
         val data = mutableMapOf<String, Any?>()
+        val techList = mutableListOf<String>()
 
         tags[handle] = tag
+
         data["handle"] = handle
 
         for ( tech in tag.techList ) {
-            data[tech.split(".").last()] = when (tech) {
+            val type = tech.split(".").last()
+
+            techList.add(type)
+
+            data[type] = when (tech) {
                 NfcA::class.java.name -> NfcA.get(tag).let {
                     mapOf(
                         "identifier" to tag.id,
@@ -135,6 +141,8 @@ class TagManager/*(private val activity: Activity)*/ {
                     "identifier" to tag.id)
             }
         }
+
+        data["techList"] = techList
 
         return data
     }

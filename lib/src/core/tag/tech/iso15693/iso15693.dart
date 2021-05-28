@@ -16,21 +16,14 @@ class Iso15693 extends NFCTag {
   /// Get an instance of `Iso15693` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Iso15693`.
-  static Iso15693? _from({
+  factory Iso15693._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotIso15693 ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return Iso15693._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      icManufacturerCode: _data['icManufacturerCode'],
-      icSerialNumber: _data['icSerialNumber']);
-  }
+  }) => Iso15693._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          icManufacturerCode: _data['icManufacturerCode'],
+          icSerialNumber: _data['icSerialNumber']);
 
   /// The value from [NFCISO15693Tag#identifier] on iOS.
   final Uint8List identifier;

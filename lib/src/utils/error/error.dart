@@ -1,6 +1,6 @@
 part of util;
 
-/// The class represents the error when the NFC feature has exception.
+/// The class represents the error when the `NFC` feature has exception.
 abstract class NfcError extends Error {
   /// Constructs an instance with the given values for testing.
   ///
@@ -20,4 +20,11 @@ abstract class NfcError extends Error {
 
   /// The error details information.
   final dynamic details;
+
+  Object get type => _type;
+
+  @override
+  String toString() =>
+      "NfcError(type: $type, "
+      "message: $message, details: $details)";
 }

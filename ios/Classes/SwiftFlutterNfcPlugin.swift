@@ -51,17 +51,17 @@ public class SwiftFlutterNfcPlugin: NSObject, FlutterPlugin {
         case "stopSession":
             self.session.stopSession(call.arguments as! [String: Any?], result: result)
         case "disposeTag":
-            self.tagManager.disposeTag(call.arguments as! [String : Any?], result: result)
+            self.tagManager.disposeTag(call.arguments as! [String: Any?], result: result)
         case "Ndef":
-            self.ndef.handle(call.arguments as! [String : Any?], result: result)
+            self.ndef.handle(call.arguments as! [String: Any?], result: result)
         case "Mifare":
-            self.mifare.handle(call.arguments as! [String : Any?], result: result)
+            self.mifare.handle(call.arguments as! [String: Any?], result: result)
         case "Felica":
-            self.felica.handle(call.arguments as! [String : Any?], result: result)
+            self.felica.handle(call.arguments as! [String: Any?], result: result)
         case "Iso7816":
-            self.iso7816.handle(call.arguments as! [String : Any?], result: result)
+            self.iso7816.handle(call.arguments as! [String: Any?], result: result)
         case "Iso15693":
-            self.iso15693.handle(call.arguments as! [String : Any?], result: result)
+            self.iso15693.handle(call.arguments as! [String: Any?], result: result)
         default:
             result(FlutterMethodNotImplemented)
         }

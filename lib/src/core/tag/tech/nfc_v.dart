@@ -17,22 +17,15 @@ class NfcV extends NFCTag {
   /// Get an instance of `NfcV` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NfcV`.
-  static NfcV? _from({
+  factory NfcV._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotNfcV ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return NfcV._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      dsfId: _data['dsfId'],
-      responseFlags: _data['responseFlags'],
-      maxTransceiveLength: _data['maxTransceiveLength']);
-  }
+  }) => NfcV._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          dsfId: _data['dsfId'],
+          responseFlags: _data['responseFlags'],
+          maxTransceiveLength: _data['maxTransceiveLength']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

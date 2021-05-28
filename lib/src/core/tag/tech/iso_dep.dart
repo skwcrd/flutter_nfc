@@ -20,24 +20,17 @@ class IsoDep extends NFCTag {
   /// Get an instance of `IsoDep` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `IsoDep`.
-  static IsoDep? _from({
+  factory IsoDep._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotIsoDep ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return IsoDep._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      hiLayerResponse: _data['hiLayerResponse'],
-      historicalBytes: _data['historicalBytes'],
-      isExtendedLengthApduSupported: _data['isExtendedLengthApduSupported'],
-      maxTransceiveLength: _data['maxTransceiveLength'],
-      timeout: _data['timeout']);
-  }
+  }) => IsoDep._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          hiLayerResponse: _data['hiLayerResponse'],
+          historicalBytes: _data['historicalBytes'],
+          isExtendedLengthApduSupported: _data['isExtendedLengthApduSupported'],
+          maxTransceiveLength: _data['maxTransceiveLength'],
+          timeout: _data['timeout']);
 
   /// The value from [Tag#id] on Android.
   final Uint8List identifier;

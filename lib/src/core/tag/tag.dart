@@ -69,57 +69,98 @@ abstract class NFCTag {
   factory NFCTag.instanceFor({
     required NFCTagPlatform delegate,
   }) {
-    final _type = delegate.type;
     final _handle = delegate.handle;
+    final _techList = delegate.techList;
 
-    _nfcTagInstance[_type]![_handle] =
-        NFCTag._from(delegate: delegate);
+    _nfcTagInstance.putIfAbsent(
+      _handle, () => {});
 
-    return _nfcTagInstance[_type]![_handle]!;
+    for ( final _tech in _techList ) {
+      final _tag = NFCTag._from(delegate: delegate, type: _tech);
+
+      _nfcTagInstance[_handle]!.update(
+        _tech, (t) => _tag, ifAbsent: () => _tag);
+    }
+
+    return _nfcTagInstance[_handle]!
+        .values
+        .firstWhere(
+          (e) => e != null)!;
   }
 
   static NFCTag? _from({
     required NFCTagPlatform delegate,
+    required NFCTagType type,
   }) {
-    switch (delegate.type) {
+    if ( delegate.data[type.value] == null ) {
+      return null;
+    }
+
+    switch (type) {
       case NFCTagType.Ndef:
-        return Ndef._from(delegate: delegate);
+        return Ndef._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.NdefFormatable:
-        return NdefFormatable._from(delegate: delegate);
+        return NdefFormatable._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.NfcA:
-        return NfcA._from(delegate: delegate);
+        return NfcA._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.NfcB:
-        return NfcB._from(delegate: delegate);
+        return NfcB._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.NfcF:
-        return NfcF._from(delegate: delegate);
+        return NfcF._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.NfcV:
-        return NfcV._from(delegate: delegate);
+        return NfcV._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.IsoDep:
-        return IsoDep._from(delegate: delegate);
+        return IsoDep._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.Mifare:
-        return Mifare._from(delegate: delegate);
+        return Mifare._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.MifareClassic:
-        return MifareClassic._from(delegate: delegate);
+        return MifareClassic._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.MifareUltralight:
-        return MifareUltralight._from(delegate: delegate);
+        return MifareUltralight._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.Felica:
-        return Felica._from(delegate: delegate);
+        return Felica._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.Iso7816:
-        return Iso7816._from(delegate: delegate);
+        return Iso7816._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       case NFCTagType.Iso15693:
-        return Iso15693._from(delegate: delegate);
+        return Iso15693._from(
+          Map<String, dynamic>.from(delegate.data[type.value]),
+          delegate: delegate);
 
       default:
     }
@@ -127,81 +168,68 @@ abstract class NFCTag {
     return null;
   }
 
-  static const Map<NFCTagType, Map<String, NFCTag?>> _nfcTagInstance = {
-    NFCTagType.Ndef: <String, NFCTag?>{},
-    NFCTagType.NdefFormatable: <String, NFCTag?>{},
-    NFCTagType.NfcA: <String, NFCTag?>{},
-    NFCTagType.NfcB: <String, NFCTag?>{},
-    NFCTagType.NfcF: <String, NFCTag?>{},
-    NFCTagType.NfcV: <String, NFCTag?>{},
-    NFCTagType.IsoDep: <String, NFCTag?>{},
-    NFCTagType.Mifare: <String, NFCTag?>{},
-    NFCTagType.MifareClassic: <String, NFCTag?>{},
-    NFCTagType.MifareUltralight: <String, NFCTag?>{},
-    NFCTagType.Felica: <String, NFCTag?>{},
-    NFCTagType.Iso7816: <String, NFCTag?>{},
-    NFCTagType.Iso15693: <String, NFCTag?>{},
-    NFCTagType.unknown: <String, NFCTag?>{},
-  };
+  static final Map<String, Map<NFCTagType, NFCTag?>> _nfcTagInstance = {};
 
   final NFCTagPlatform _delegate;
 
   @protected
+  @visibleForTesting
   MethodChannel get channel => _delegate.channel;
 
   @visibleForTesting
-  static Map<NFCTagType, Map<String, NFCTag?>> get tagInstance => _nfcTagInstance;
+  static Map<String, Map<NFCTagType, NFCTag?>> get tagInstance => _nfcTagInstance;
+
+  Ndef? get ndef =>
+      _nfcTagInstance[handle]![NFCTagType.Ndef] as Ndef?;
+
+  NdefFormatable? get ndefFormatable =>
+      _nfcTagInstance[handle]![NFCTagType.NdefFormatable] as NdefFormatable?;
+
+  NfcA? get nfcA =>
+      _nfcTagInstance[handle]![NFCTagType.NfcA] as NfcA?;
+
+  NfcB? get nfcB =>
+      _nfcTagInstance[handle]![NFCTagType.NfcB] as NfcB?;
+
+  NfcF? get nfcF =>
+      _nfcTagInstance[handle]![NFCTagType.NfcF] as NfcF?;
+
+  NfcV? get nfcV =>
+      _nfcTagInstance[handle]![NFCTagType.NfcV] as NfcV?;
+
+  IsoDep? get isoDep =>
+      _nfcTagInstance[handle]![NFCTagType.IsoDep] as IsoDep?;
+
+  Mifare? get mifare =>
+      _nfcTagInstance[handle]![NFCTagType.Mifare] as Mifare?;
+
+  MifareClassic? get mifareClassic =>
+      _nfcTagInstance[handle]![NFCTagType.MifareClassic] as MifareClassic?;
+
+  MifareUltralight? get mifareUltralight =>
+      _nfcTagInstance[handle]![NFCTagType.MifareUltralight] as MifareUltralight?;
+
+  Felica? get felica =>
+      _nfcTagInstance[handle]![NFCTagType.Felica] as Felica?;
+
+  Iso7816? get iso7816 =>
+      _nfcTagInstance[handle]![NFCTagType.Iso7816] as Iso7816?;
+
+  Iso15693? get iso15693 =>
+      _nfcTagInstance[handle]![NFCTagType.Iso15693] as Iso15693?;
 
   /// The value used by this plugin internally.
   @protected
+  @visibleForTesting
   String get handle => _delegate.handle;
 
-  NFCTagType get tagType => _delegate.type;
-
-  Ndef? get ndef =>
-      _nfcTagInstance[NFCTagType.Ndef]![handle] as Ndef?;
-
-  NdefFormatable? get ndefFormatable =>
-      _nfcTagInstance[NFCTagType.NdefFormatable]![handle] as NdefFormatable?;
-
-  NfcA? get nfcA =>
-      _nfcTagInstance[NFCTagType.NfcA]![handle] as NfcA?;
-
-  NfcB? get nfcB =>
-      _nfcTagInstance[NFCTagType.NfcB]![handle] as NfcB?;
-
-  NfcF? get nfcF =>
-      _nfcTagInstance[NFCTagType.NfcF]![handle] as NfcF?;
-
-  NfcV? get nfcV =>
-      _nfcTagInstance[NFCTagType.NfcV]![handle] as NfcV?;
-
-  IsoDep? get isoDep =>
-      _nfcTagInstance[NFCTagType.IsoDep]![handle] as IsoDep?;
-
-  Mifare? get mifare =>
-      _nfcTagInstance[NFCTagType.Mifare]![handle] as Mifare?;
-
-  MifareClassic? get mifareClassic =>
-      _nfcTagInstance[NFCTagType.MifareClassic]![handle] as MifareClassic?;
-
-  MifareUltralight? get mifareUltralight =>
-      _nfcTagInstance[NFCTagType.MifareUltralight]![handle] as MifareUltralight?;
-
-  Felica? get felica =>
-      _nfcTagInstance[NFCTagType.Felica]![handle] as Felica?;
-
-  Iso7816? get iso7816 =>
-      _nfcTagInstance[NFCTagType.Iso7816]![handle] as Iso7816?;
-
-  Iso15693? get iso15693 =>
-      _nfcTagInstance[NFCTagType.Iso15693]![handle] as Iso15693?;
+  List<NFCTagType> get techList => _delegate.techList;
 
   Future<void> disposeTag() async {
     try {
       await _delegate.disposeTag();
 
-      _nfcTagInstance[tagType]!.remove(handle);
+      _nfcTagInstance.remove(handle);
     } on PlatformException catch (error, stackTrace) {
       throw PlatformException(
         code: "disposeTag",

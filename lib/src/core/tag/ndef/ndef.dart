@@ -17,26 +17,19 @@ class Ndef extends NFCTag {
   /// Get an instance of `Ndef` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `NDEF`.
-  static Ndef? _from({
+  factory Ndef._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotNdef ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return Ndef._(
-      delegate: delegate,
-      isWritable: _data.remove('isWritable'),
-      maxSize: _data.remove('maxSize'),
-      cachedMessage: _data['cachedMessage'] == null
-          ? null
-          : NdefMessage.fromMap(
-              Map<String, dynamic>.from(
-                _data.remove('cachedMessage'))),
-      additionalData: _data);
-  }
+  }) => Ndef._(
+          delegate: delegate,
+          isWritable: _data.remove('isWritable'),
+          maxSize: _data.remove('maxSize'),
+          cachedMessage: _data['cachedMessage'] == null
+              ? null
+              : NdefMessage.fromMap(
+                  Map<String, dynamic>.from(
+                    _data.remove('cachedMessage'))),
+          additionalData: _data);
 
   /// The value from [Ndef#isWritable] on Android,
   /// [NFCNDEFTag#queryStatus] on iOS.

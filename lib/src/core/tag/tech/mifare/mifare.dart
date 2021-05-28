@@ -16,25 +16,18 @@ class Mifare extends NFCTag {
   /// Get an instance of `Mifare` for the given tag.
   ///
   /// Returns null if the tag is not compatible with `Mifare`.
-  static Mifare? _from({
+  factory Mifare._from(
+    Map<String, dynamic> _data, {
     required NFCTagPlatform delegate,
-  }) {
-    if ( delegate.type.isNotMifare ) {
-      return null;
-    }
-
-    final _data = Map<String, dynamic>.from(delegate.data);
-
-    return Mifare._(
-      delegate: delegate,
-      identifier: _data['identifier'],
-      mifareFamily: MifareFamily.values
-          .firstWhere(
-            (e) => e.value == _data['mifareFamily'],
-            orElse: () => MifareFamily.unknown,
-          ),
-      historicalBytes: _data['historicalBytes']);
-  }
+  }) => Mifare._(
+          delegate: delegate,
+          identifier: _data['identifier'],
+          mifareFamily: MifareFamily.values
+              .firstWhere(
+                (e) => e.value == _data['mifareFamily'],
+                orElse: () => MifareFamily.unknown,
+              ),
+          historicalBytes: _data['historicalBytes']);
 
   /// The value from [NFCMiFareTag#mifareFamily] on iOS.
   final MifareFamily mifareFamily;

@@ -120,6 +120,9 @@ class Mifare(
     private fun mifareClassicTransceive(call: MethodCall, result: Result) {
         tagManager.tagHandler(call, result, { MifareClassic.get(it) }) {
             val data = call.argument<ByteArray>("data")!!
+            val timeout = call.argument<Int>("timeout")!!
+
+            it.timeout = timeout
 
             result.success(
                 it.transceive(data))
@@ -149,6 +152,9 @@ class Mifare(
     private fun mifareUltralightTransceive(call: MethodCall, result: Result) {
         tagManager.tagHandler(call, result, { MifareUltralight.get(it) }) {
             val data = call.argument<ByteArray>("data")!!
+            val timeout = call.argument<Int>("timeout")!!
+
+            it.timeout = timeout
 
             result.success(
                 it.transceive(data))
