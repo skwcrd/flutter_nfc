@@ -181,16 +181,16 @@ bool isAvailable = await FlutterNfc.instance.isAvailable();
 
 if ( isAvailable ) {
     // Start session
-    FlutterNfc.instance.startSession(
+    await FlutterNfc.instance.startSession(
         onTagDiscovered: (NFCTag tag) async {
             // Do something with an NFCTag instance.
         },
     );
 
     // Stop session
-    FlutterNfc.instance.stopSession();
+    await FlutterNfc.instance.stopSession();
 } else {
-    FlutterNfc.instance.openSetting();
+    await FlutterNfc.instance.openSetting();
 }
 ```
 
@@ -201,14 +201,10 @@ Obtain an instance by calling the get method on the **NFCTag** class. For exampl
 ```dart
 final ndef = tag.ndef;
 
-if (ndef == null) {
+if ( ndef == null ) {
   print('Tag is not compatible with NDEF');
   return;
 }
 
 // Do something with an Ndef instance
 ```
-
-## Real-World-App
-
-See [this repo](https://github.com/skwcrd/flutter_nfc/tree/main/example) which is a Real-World-App demonstrates how to use this plugin.
